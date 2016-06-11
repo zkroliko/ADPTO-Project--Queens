@@ -1,7 +1,7 @@
 #ifndef ADPTO_QUEEN_H
 #define ADPTO_QUEEN_H
 
-const short MAX_QUEEN_POWER = 60;
+const unsigned short MAX_QUEEN_POWER = 60;
 
 class Queen {
 private:

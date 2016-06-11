@@ -3,18 +3,18 @@
 #include<map>
 #include "../include/Queen.h"
 
-const short MAX_SIZE = 128;
+const unsigned short MAX_SIZE = 128;
 
-typedef std::tuple<short,short> Pos;
+typedef std::tuple<unsigned short,unsigned short> Pos;
 
 class Board {
 private:
-    short size;
+    unsigned short size;
     std::map<Pos, Queen> queens;
 public:
     Board() {}
-    Board(short size);
-    void addQueen(const Queen& queen, const short x, const short y);
+    Board(unsigned short size);
+    void addQueen(const Queen& queen, const unsigned short x, const unsigned short y);
     short getSize() { return size;}
 };
 
