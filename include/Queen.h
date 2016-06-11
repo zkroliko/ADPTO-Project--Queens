@@ -5,16 +5,16 @@ const short MAX_QUEEN_POWER = 60;
 
 class Queen {
 private:
-    short power;
+    unsigned short power;
 public:
 
     Queen() { }
 
-    Queen(short power) : power(power) { }
+    Queen(unsigned short power) : power(power) { }
 
-    inline short getPower() const;
+    inline unsigned short getPower() const;
 
-    inline void setPower(short power);
+    inline void setPower(unsigned short power);
 };
 
 #endif //ADPTO_QUEEN_H

@@ -1,7 +1,8 @@
+#include <vector>
 #include "../include/Loader.h"
 
 
-Board* Loader::load(const short size, const char* input[]) {
+Board* Loader::load(const unsigned short size, const std::vector<std::string> lines) {
     Board *board = new Board(size);
 
     return board;
