@@ -1,14 +1,20 @@
 #include <iostream>
-#include "../include/Board.h"
+#include "../include/Loader.h"
 
 using namespace std;
 
-
 int main() {
-    cout << "Hello, World!" << endl;
+    int solution_size, board_size;
+    /* Getting the problem specification */
+    cin >> board_size;
+    cout << "Board size: " << board_size << endl;
+    cin >> solution_size;
+    cout << "Solving solution of size: " << solution_size << endl;
+    /* Getting the board */
+//    Loader::load(new char**[]);
     Board board(8);
+
     Queen queen(1);
     board.addQueen(queen,1,1);
-    cout << "Board size: " << board.getSize();
     return 0;
 }
