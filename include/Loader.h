@@ -4,7 +4,7 @@
 
 class Loader {
     public:
-        static Board* load(const unsigned short size, const std::vector<std::string> lines);
+        static Board* load(const unsigned short size);
 };
 
 

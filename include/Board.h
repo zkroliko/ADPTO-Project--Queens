@@ -15,7 +15,8 @@ public:
     Board() {}
     Board(unsigned short size);
     void addQueen(const Queen& queen, const unsigned short x, const unsigned short y);
-    short getSize() { return size;}
+    short getSize() const { return size;}
+    std::string toString();
 };
 
 #endif //ADPTO_BOARD_H

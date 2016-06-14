@@ -1,13 +1,22 @@
 #include <algorithm>
+#include <math.h>
 #include "../include/Queen.h"
 
-inline unsigned short Queen::getPower() const {
-    return power;
+inline void Queen::setPower(const unsigned short power) {
+    Queen::power = std::max(MIN_QUEEN_POWER,std::min(power,MAX_QUEEN_POWER));
 }
 
-inline void Queen::setPower(const unsigned short power) {
-    Queen::power = std::min(power,MAX_QUEEN_POWER);
+unsigned short Queen::powerFromExternal(const unsigned long long power) {
+    return static_cast<unsigned short>(log2(power));
 }
+
+unsigned long long Queen::powerToExternal(const unsigned short power) {
+    return (unsigned long long int) pow(2, power);
+}
+
+
+
+
 
 
 
