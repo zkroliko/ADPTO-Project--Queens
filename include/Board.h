@@ -15,6 +15,8 @@ public:
     Board() {}
     Board(unsigned short size);
     void addQueen(const Queen& queen, const unsigned short x, const unsigned short y);
+    const bool occupied(unsigned short x, unsigned short y) { return queens.count(Pos(x,y)) > 0; }
+    const Queen& get(unsigned short x, unsigned short y) { return queens.at(Pos(x,y));}
     short getSize() const { return size;}
     std::string toString();
 };

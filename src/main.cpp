@@ -20,7 +20,7 @@ int main() {
     DEBUG("Loading board");
     Board* problem = Loader::load(board_size);
     DEBUG("Loading board finished");
-    cout << problem->toString();
+    cerr << problem->toString();
 //    Queen queen(1);
 //    board.addQueen(queen,1,1);
     return 0;

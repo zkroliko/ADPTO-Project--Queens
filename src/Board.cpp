@@ -15,7 +15,7 @@ std::string Board::toString() {
             if (queens.count(Pos(i,j)) >0 ){
                 result += std::to_string(Queen::powerToExternal(queens[Pos(i,j)].getPower()));
             } else {
-                result += " ";
+                result += "0";
             }
             result += "    ";
         }
