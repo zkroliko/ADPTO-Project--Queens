@@ -26,6 +26,8 @@ public:
     }
 private:
     unsigned int kernelize(unsigned int target);
+    bool moveValid(Queen& source, Queen& target) const;
+    void move(const Queen& source, const Queen& target);
 };
 
 

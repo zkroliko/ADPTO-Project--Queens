@@ -19,3 +19,22 @@ unsigned int Solver::kernelize(unsigned int target) {
     return target-removed;
 }
 
+bool Solver::moveValid(Queen &source, Queen &target) const{
+    for (auto connection : *source.getConnections()) {
+        if (&connection.second == &target) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Solver::move(const Queen &source, const Queen &target) {
+
+}
+
+
+
+
+
+
+
