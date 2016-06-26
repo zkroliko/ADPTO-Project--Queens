@@ -4,7 +4,7 @@
 #include <map>
 
 const unsigned short MAX_QUEEN_POWER = 60;
-const unsigned short MIN_QUEEN_POWER = 1;
+const unsigned short MIN_QUEEN_POWER = 0;
 
 enum Direction
 {

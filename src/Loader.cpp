@@ -16,24 +16,25 @@ Board* Loader::load(const unsigned short size) {
 
     // Loading and making the horizontal connection_count at the same time
 
-    int connection_count = 0;
-    std::string line;
+    std::string element;
     unsigned short power;
     Queen *last = nullptr;
+
+    int connection_count = 0;
     for(unsigned short i = 0; i < size; ++i) {
         for(unsigned short j = 0; j < size; ++j) {
-            cin >> line;
-            unsigned long long parsedLong = std::stoull(line);
+            cin >> element;
+            unsigned long long parsedLong = std::stoull(element);
             if (parsedLong > 0) {
                 power = static_cast<unsigned short>(Queen::powerFromExternal(parsedLong));
-                Queen created = Queen(power);
-                board->addQueen(created, i, j);
+                Queen* created = new Queen(power);
+                board->addQueen(*created, i, j);
                 if (last) {
-                    last->addConnection(Direction::right, created);
-                    created.addConnection(Direction::left, *last);
+                    last->addConnection(Direction::right, *created);
+                    created->addConnection(Direction::left, *last);
                     connection_count++;
                 }
-                last = &created;
+                last = created;
             }
         }
         last = nullptr;
@@ -46,11 +47,11 @@ Board* Loader::load(const unsigned short size) {
             if (board->occupied(j,i)) {
                 Queen actual = board->get(j,i);
                 if (last) {
-                    last->addConnection(Direction::bottom,actual);
+                    last->addConnection(Direction::bottom, actual);
                     actual.addConnection(Direction::top, *last);
+                    connection_count++;
                 }
                 last = &actual;
-
             }
         }
         last = nullptr;
@@ -58,25 +59,40 @@ Board* Loader::load(const unsigned short size) {
     DEBUG("Vertical connections added: " << connection_count );
 
     // Making the diagonal left to right connections
+    connection_count = 0;
+    for(unsigned short i = 0; i < size; ++i) {
+        for(unsigned short j = i; j < size; ++j) {
+            if (board->occupied(j, j+i)) {
+                Queen actual = board->get(j,j+i);
+                if (last) {
+                    last->addConnection(Direction::bottom_right, actual);
+                    actual.addConnection(Direction::top_left, *last);
+                    connection_count++;
+                }
+                last = &actual;
+            }
+        }
+        last = nullptr;
+    }
+    DEBUG("Diagonal left connections added: " << connection_count );
+
+//    // Making the diagonal right to left connections
 //    connection_count = 0;
-//    for(unsigned short i = 0; i < size; ++i) {
-//        for(unsigned short j = 0; j < size; ++j) {
-//            unsigned short x = j;
-//            unsigned short y = j+i;
-//            if (board->occupied(x, y)) {
-//                Queen actual = board->get(x,y);
-//
+//    for(unsigned short i = (unsigned short) (size - 1); i >= 0; --i) {
+//        for(unsigned short j = i; j >= 0; --j) {
+//            if (j+i < size && board->occupied(j, j+i)) {
+//                Queen actual = board->get(j,j+i);
 //                if (last) {
-//                    last->addConnection(Direction::bottom,actual);
-//                    actual.addConnection(Direction::top, *last);
+//                    last->addConnection(Direction::bottom_left, actual);
+//                    actual.addConnection(Direction::top_right, *last);
+//                    connection_count++;
 //                }
 //                last = &actual;
-//
 //            }
 //        }
 //        last = nullptr;
 //    }
-//    DEBUG("Diagonal left connections added: " << connection_count );
+//    DEBUG("Diagonal right connections added: " << connection_count );
 
     return board;
 }

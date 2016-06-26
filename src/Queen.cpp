@@ -11,7 +11,7 @@ unsigned short Queen::powerFromExternal(const unsigned long long power) {
 }
 
 unsigned long long Queen::powerToExternal(const unsigned short power) {
-    return (unsigned long long int) pow(2, power);
+    return static_cast<unsigned long long int> (pow(2, power));
 }
 
 
