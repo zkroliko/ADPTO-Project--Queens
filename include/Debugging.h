@@ -7,7 +7,9 @@
 #define DEBUG_ENABLED
 
 #ifdef DEBUG_ENABLED
-#define DEBUG(x) std::cerr << x << endl;
+#include <sstream>
+#include <iostream>
+#define DEBUG(x) std::cerr << x << std::endl;
 #else
 #define DEBUG(x)
 #endif

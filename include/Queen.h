@@ -21,6 +21,7 @@ enum Direction
 class Queen {
 private:
     unsigned short power;
+    bool exists;
     std::map<Direction,Queen> connections;
 public:
 
@@ -34,13 +35,18 @@ public:
 
     inline const Queen& getConnection (Direction direction) const {return connections.at(direction);};
 
-    inline const std::map<Direction, Queen>& getConnections() const { return connections; }
+    inline std::map<Direction, Queen>* getConnections() { return &connections; }
 
     void setPower(unsigned short power);
 
     static unsigned short powerFromExternal(const unsigned long long);
 
     static unsigned long long powerToExternal(const unsigned short);
+
+    bool isExists() const { return exists; }
+
+    void setExists(bool exists) { Queen::exists = exists; }
+
 
 };
 

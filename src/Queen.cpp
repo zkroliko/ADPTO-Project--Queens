@@ -2,7 +2,7 @@
 #include <math.h>
 #include "../include/Queen.h"
 
-inline void Queen::setPower(const unsigned short power) {
+void Queen::setPower(const unsigned short power) {
     Queen::power = std::max(MIN_QUEEN_POWER,std::min(power,MAX_QUEEN_POWER));
 }
 

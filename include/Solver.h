@@ -2,13 +2,14 @@
 #define ADPTO_SOLVER_H
 
 
+#include <vector>
 #include "Board.h"
 
 class Solver {
     Board& board;
+    std::vector<Move> moves;
 public:
-
-    Solver(Board &board) : board(board) { }
+    Solver(Board &board) : board(board) {  }
 
     Board &getBoard() const {
         return board;
@@ -18,7 +19,13 @@ public:
         Solver::board = board;
     }
 
-    void solve() {;}
+    bool possible(unsigned int target);
+
+    const std::vector<Move> &getSolution() const {
+        return moves;
+    }
+private:
+    unsigned int kernelize(unsigned int target);
 };
 
 

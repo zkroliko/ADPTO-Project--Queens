@@ -24,5 +24,27 @@ std::string Board::toString() {
     return result;
 }
 
+bool Board::removeQueen(unsigned short x, unsigned short y) {
+    if (queens.count(Pos(x,y)) > 0 ) {
+        queens[Pos(x,y)]->setExists(false);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool Board::changeQueen(unsigned short x, unsigned short y, unsigned short power) {
+    if (queens.count(Pos(x,y)) >0 ) {
+        queens[Pos(x,y)]->setPower(power);
+        return false;
+    } else {
+        return false;
+    }
+}
+
+
+
+
+
 
 
