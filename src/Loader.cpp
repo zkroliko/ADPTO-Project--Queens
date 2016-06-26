@@ -60,10 +60,12 @@ Board* Loader::load(const unsigned short size) {
 
     // Making the diagonal left to right connections
     connection_count = 0;
-    for(unsigned short i = 0; i < size; ++i) {
-        for(unsigned short j = i; j < size; ++j) {
-            if (board->occupied(j, j+i)) {
-                Queen actual = board->get(j,j+i);
+    for(int i = -size+2; i < size-1; ++i) {
+        for(unsigned short j = 0; j < size; ++j) {
+            unsigned short x = static_cast<unsigned short>(j+i);
+            unsigned short y = j;
+            if (board->occupied(y, x)) {
+                Queen actual = board->get(y, x);
                 if (last) {
                     last->addConnection(Direction::bottom_right, actual);
                     actual.addConnection(Direction::top_left, *last);
@@ -74,25 +76,27 @@ Board* Loader::load(const unsigned short size) {
         }
         last = nullptr;
     }
-    DEBUG("Diagonal left connections added: " << connection_count );
+    DEBUG("Diagonal left to right connections added: " << connection_count );
 
-//    // Making the diagonal right to left connections
-//    connection_count = 0;
-//    for(unsigned short i = (unsigned short) (size - 1); i >= 0; --i) {
-//        for(unsigned short j = i; j >= 0; --j) {
-//            if (j+i < size && board->occupied(j, j+i)) {
-//                Queen actual = board->get(j,j+i);
-//                if (last) {
-//                    last->addConnection(Direction::bottom_left, actual);
-//                    actual.addConnection(Direction::top_right, *last);
-//                    connection_count++;
-//                }
-//                last = &actual;
-//            }
-//        }
-//        last = nullptr;
-//    }
-//    DEBUG("Diagonal right connections added: " << connection_count );
+    // Making the diagonal right to left connections
+    connection_count = 0;
+    for(short i = 0; i > -size; --i) {
+        for(unsigned short j = 0; j < size; ++j) {
+            unsigned short x = size-j+i;
+            unsigned short y = j;
+            if (x >= 0 && board->occupied(y, x)) {
+                Queen actual = board->get(y, x);
+                if (last) {
+                    last->addConnection(Direction::bottom_left, actual);
+                    actual.addConnection(Direction::top_right, *last);
+                    connection_count++;
+                }
+                last = &actual;
+            }
+        }
+        last = nullptr;
+    }
+    DEBUG("Diagonal right to left connections added: " << connection_count );
 
     return board;
 }
