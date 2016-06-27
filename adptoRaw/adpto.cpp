@@ -37,7 +37,7 @@ enum Direction
     bottom_right = 7
 };
 
-const unsigned short MAX_SIZE = 128;
+const unsigned short MAX_BOARD_SIZE = 128;
 
 typedef std::map<Pos, Queen*> PlacementMap;
 
@@ -143,6 +143,8 @@ private:
     bool check();
 };
 
+/* ------------ An util */
+
 template <typename M, typename V>
 void mapToVec( const  M & m, V & v ) {
     for( typename M::const_iterator it = m.begin(); it != m.end(); ++it ) {
@@ -150,9 +152,9 @@ void mapToVec( const  M & m, V & v ) {
     }
 }
 
-using namespace std;
+/* ----------- Board */
 
-Board::Board(unsigned short size) : size(std::min(MAX_SIZE,size)) {}
+Board::Board(unsigned short size) : size(std::min(MAX_BOARD_SIZE,size)) {}
 
 void Board::addQueen(Queen& queen, const unsigned short x, const unsigned short y) {
     Board::queens[Pos(x,y)] = &queen;
@@ -192,11 +194,10 @@ bool Board::changeQueen(unsigned short x, unsigned short y, unsigned short power
     }
 }
 
-
-using namespace std;
+/* --------------------- Loader implementation */
 
 Board* Loader::load(const unsigned short size) {
-    if (size < MIN_QUEEN_POWER || size > MAX_QUEEN_POWER) {
+    if (size > MAX_BOARD_SIZE) {
         __throw_invalid_argument("Invalid board size");
     }
     Board *board = new Board(size);
@@ -271,7 +272,7 @@ Board* Loader::load(const unsigned short size) {
         for(unsigned short j = 0; j < size; ++j) {
             unsigned short x = size-j+i;
             unsigned short y = j;
-            if (x >= 0 && board->occupied(y, x)) {
+            if (board->occupied(y, x)) {
                 Queen* actual = board->get(y, x);
                 if (last) {
                     last->addConnection(Direction::bottom_left, actual);
@@ -287,6 +288,8 @@ Board* Loader::load(const unsigned short size) {
 
     return board;
 }
+
+using namespace std;
 
 int main() {
     unsigned int solution_size;

@@ -9,7 +9,7 @@
 using namespace std;
 
 Board* Loader::load(const unsigned short size) {
-    if (size < MIN_QUEEN_POWER || size > MAX_QUEEN_POWER) {
+    if (size > MAX_BOARD_SIZE) {
         __throw_invalid_argument("Invalid board size");
     }
     Board *board = new Board(size);
@@ -84,7 +84,7 @@ Board* Loader::load(const unsigned short size) {
         for(unsigned short j = 0; j < size; ++j) {
             unsigned short x = size-j+i;
             unsigned short y = j;
-            if (x >= 0 && board->occupied(y, x)) {
+            if (board->occupied(y, x)) {
                 Queen* actual = board->get(y, x);
                 if (last) {
                     last->addConnection(Direction::bottom_left, actual);
