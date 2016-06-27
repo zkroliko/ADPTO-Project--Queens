@@ -1,7 +1,3 @@
-//
-// Created by zbkro on 14.06.2016.
-//
-
 #ifndef ADPTO_DEBUGGING_H
 
 //#define DEBUG_ENABLED

@@ -89,6 +89,10 @@ void Solver::outlineQueens() {
             leftQueens.push_back(it.operator*());
         }
     }
+    std::sort(leftQueens.begin(),leftQueens.end(), [ ]( Queen* lhs, Queen* rhs )
+    {
+        return lhs->getPower() < rhs->getPower();
+    });
 }
 
 
