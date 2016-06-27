@@ -342,6 +342,7 @@ int main() {
     for (auto record: *board->getQueens()) {
         delete record.second;
     }
+    delete board;
 
     return 0;
 }
