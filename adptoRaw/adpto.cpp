@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iterator>
 #include <iostream>
+#include <tuple>
 #include<map>
 
 //#define DEBUG_ENABLED

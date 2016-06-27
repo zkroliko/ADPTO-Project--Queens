@@ -31,44 +31,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="66">
-              <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="50" />
+              <caret line="3" column="64" selection-start-line="3" selection-start-column="64" selection-end-line="3" selection-end-column="64" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="adpto.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="adpto.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/adpto.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+            <state relative-caret-position="132">
+              <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
               <folding>
-                <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#175#220#0" expanded="true" />
-                <marker date="1467061047145" expanded="true" signature="3444:3564" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="3741:3782" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="3814:4269" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="4331:4479" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="4563:4710" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="4782:8065" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="8078:9158" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="9249:9330" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="9404:9460" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="9532:9599" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="9651:9798" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="9847:9909" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="9989:10321" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="10344:10871" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="10925:11168" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="11240:11278" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="11328:11499" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="11521:11763" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="11800:11972" ph="{...}" />
-                <marker date="1467061047145" expanded="true" signature="12003:12443" ph="{...}" />
+                <element signature="e#192#237#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -82,6 +61,7 @@
         <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/adpto" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/adpto.cpp" />
       </list>
     </option>
   </component>
@@ -336,9 +316,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1932" height="1048" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24973877" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24973877" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32932165" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32932165" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -379,59 +359,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#175#220#0" expanded="true" />
-            <marker date="1467061047145" expanded="true" signature="3444:3564" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="3741:3782" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="3814:4269" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="4331:4479" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="4563:4710" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="4782:8065" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="8078:9158" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9249:9330" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9404:9460" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9532:9599" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9651:9798" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9847:9909" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9989:10321" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="10344:10871" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="10925:11168" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="11240:11278" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="11328:11499" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="11521:11763" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="11800:11972" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="12003:12443" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/adpto.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#175#220#0" expanded="true" />
-            <marker date="1467061047145" expanded="true" signature="3444:3564" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="3741:3782" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="3814:4269" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="4331:4479" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="4563:4710" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="4782:8065" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="8078:9158" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9249:9330" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9404:9460" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9532:9599" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9651:9798" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9847:9909" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="9989:10321" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="10344:10871" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="10925:11168" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="11240:11278" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="11328:11499" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="11521:11763" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="11800:11972" ph="{...}" />
-            <marker date="1467061047145" expanded="true" signature="12003:12443" ph="{...}" />
+            <element signature="e#192#237#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -447,8 +375,18 @@
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="66">
-          <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="50" />
+          <caret line="3" column="64" selection-start-line="3" selection-start-column="64" selection-end-line="3" selection-end-column="64" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adpto.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
+          <folding>
+            <element signature="e#192#237#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
