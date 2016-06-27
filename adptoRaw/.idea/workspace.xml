@@ -41,8 +41,8 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="adtpo.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/adtpo.cpp">
+      <file leaf-file-name="adpto.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/adpto.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="347">
               <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
@@ -80,8 +80,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/main.cpp" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/adpto" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
       </list>
     </option>
   </component>
@@ -374,7 +374,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/adtpo.cpp">
+    <entry file="file://$PROJECT_DIR$/adpto.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -405,7 +405,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/adtpo.cpp">
+    <entry file="file://$PROJECT_DIR$/adpto.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="347">
           <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
