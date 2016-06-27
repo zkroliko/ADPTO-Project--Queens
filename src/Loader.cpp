@@ -45,7 +45,7 @@ Board* Loader::load(const unsigned short size) {
     for(unsigned short i = 0; i < size; ++i) {
         for(unsigned short j = 0; j < size; ++j) {
             if (board->occupied(j,i)) {
-                Queen actual = board->get(j,i);
+                Queen actual = *board->get(j,i);
                 if (last) {
                     last->addConnection(Direction::bottom, actual);
                     actual.addConnection(Direction::top, *last);
@@ -65,7 +65,7 @@ Board* Loader::load(const unsigned short size) {
             unsigned short x = static_cast<unsigned short>(j+i);
             unsigned short y = j;
             if (board->occupied(y, x)) {
-                Queen actual = board->get(y, x);
+                Queen actual = *board->get(y, x);
                 if (last) {
                     last->addConnection(Direction::bottom_right, actual);
                     actual.addConnection(Direction::top_left, *last);
@@ -85,7 +85,7 @@ Board* Loader::load(const unsigned short size) {
             unsigned short x = size-j+i;
             unsigned short y = j;
             if (x >= 0 && board->occupied(y, x)) {
-                Queen actual = board->get(y, x);
+                Queen actual = *board->get(y, x);
                 if (last) {
                     last->addConnection(Direction::bottom_left, actual);
                     actual.addConnection(Direction::top_right, *last);

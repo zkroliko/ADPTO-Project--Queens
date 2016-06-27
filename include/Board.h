@@ -18,7 +18,7 @@ public:
     bool changeQueen(unsigned short x, unsigned short y, unsigned short power);
     bool removeQueen(unsigned short x, unsigned short y);
     const bool occupied(unsigned short x, unsigned short y) { return queens.count(Pos(x,y)) > 0; }
-    const Queen& get(unsigned short x, unsigned short y) { return *queens.at(Pos(x,y));}
+    Queen* get(unsigned short x, unsigned short y) { return queens.at(Pos(x,y));}
     short getSize() const { return size;}
     std::string toString();
     std::map<Pos, Queen *>* getQueens() { return &queens; }

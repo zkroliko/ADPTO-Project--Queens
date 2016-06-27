@@ -24,14 +24,14 @@ int main() {
     DEBUG("Loading board finished");
     DEBUG("The board:");
     cerr << problem->toString();
-    DEBUG("Solving solution of size: " << solution_size);
+    DEBUG("Searching for a solution of size: " << solution_size);
     Solver solver(*problem);
     if (solver.possible(solution_size)) {
         DEBUG("Solution found");
-        for (Move move : solver.getSolution()) {
-            cout << std::get<0>(std::get<0>(move)->getPosition()) << " " << std::get<1>(std::get<0>(move)->getPosition());
+        for (Move* move : *solver.getSolution()) {
+            cout << std::get<0>(std::get<0>(*move)->getPosition()) << " " << std::get<1>(std::get<0>(*move)->getPosition());
             cout << " ";
-            cout << std::get<0>(std::get<1>(move)->getPosition()) << " " << std::get<1>(std::get<1>(move)->getPosition());
+            cout << std::get<0>(std::get<1>(*move)->getPosition()) << " " << std::get<1>(std::get<1>(*move)->getPosition());
             cout << endl;
         }
     } else {
