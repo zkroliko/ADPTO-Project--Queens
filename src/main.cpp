@@ -23,7 +23,7 @@ int main() {
     Board* problem = Loader::load(board_size);
     DEBUG("Loading board finished");
     DEBUG("The board:");
-    cerr << problem->toString();
+    DEBUG(problem->toString());
     DEBUG("Searching for a solution of size: " << solution_size);
     Solver solver(*problem);
     if (solver.possible(solution_size)) {

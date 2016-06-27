@@ -16,7 +16,7 @@ unsigned long long Queen::powerToExternal(const unsigned short power) {
 
 bool Queen::isConnected(const Queen &other) const {
     for (auto connection : connections) {
-        if (&connection.second == &other) {
+        if (connection.second == &other) {
             return true;
         }
     }

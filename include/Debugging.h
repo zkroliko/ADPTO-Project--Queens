@@ -4,7 +4,7 @@
 
 #ifndef ADPTO_DEBUGGING_H
 
-#define DEBUG_ENABLED
+//#define DEBUG_ENABLED
 
 #ifdef DEBUG_ENABLED
 #include <sstream>

@@ -21,7 +21,7 @@ enum Direction
     bottom_right = 7
 };
 
-typedef std::map<Direction,Queen> ConnectionMap;
+typedef std::map<Direction,Queen*> ConnectionMap;
 
 class Queen {
 private:
@@ -37,11 +37,11 @@ public:
 
     inline unsigned short getPower() const {return power;}
 
-    inline void addConnection(Direction direction, const Queen &queen)  {connections[direction] = queen;}
+    inline void addConnection(Direction direction, Queen* queen)  {connections[direction] = queen;}
 
-    inline const Queen& getConnection (Direction direction) const {return connections.at(direction);};
+    inline Queen* getConnection (Direction direction) const {return connections.at(direction);};
 
-    inline std::map<Direction, Queen>* getConnections() { return &connections; }
+    inline ConnectionMap* getConnections() { return &connections; }
 
     void setPower(unsigned short power);
 

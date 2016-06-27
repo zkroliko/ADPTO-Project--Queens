@@ -3,26 +3,35 @@
 #include "../include/Debugging.h"
 #include "../include/Tools.h"
 
-bool Solver::possible(unsigned int target) {
-    target = kernelize(target);
+bool Solver::possible(unsigned int solutionRequirement) {
+    target = kernelize(solutionRequirement);
     queenCount = countQueens();
     DEBUG("Solver: We have: " << queenCount << " queens with a target of " << target << std::endl );
     outlineQueens();
-    check();
-    undo();
-    undo();
     DEBUG("After kernelization:");
-    std::cerr << board.toString();
-    return true;
+    DEBUG(board.toString());
+    DEBUG("Now running recursive function.");
+    return check();
 }
 
 bool Solver::check() {
-    Queen* source = board.get(0,0);
-    Queen* target = board.get(0,1);
-    move(source,target);
-    source = board.get(1,0);
-    target = board.get(1,1);
-    move(source,target);
+    if (queenCount <= target) {
+        return true;
+    }
+    for (Queen * queen: leftQueens) {
+        if (queen->doesExist()) {
+            for (auto connection : *queen->getConnections()) {
+                if (queen->canJoin(*connection.second)) {
+                    move(queen,connection.second);
+                    if (check()) {
+                        return true;
+                    } else {
+                        undo();
+                    }
+                }
+            }
+        }
+    }
     return false;
 }
 
@@ -32,6 +41,7 @@ unsigned int Solver::kernelize(unsigned int target) {
     for (auto entry : *board.getQueens()) {
         if (entry.second->getConnections()->empty()) {
             entry.second->setExists(false);
+            removed++;
         }
     }
     return target-removed;
@@ -45,6 +55,7 @@ void Solver::move(Queen *source, Queen *target) {
     source->setExists(false);
     target->setPower(target->getPower()+ static_cast<unsigned short>(1));
     moves.push_back(new Move(source,target));
+    queenCount--;
 }
 
 void Solver::undo() {
@@ -53,6 +64,7 @@ void Solver::undo() {
     moves.pop_back();
     target->setPower(target->getPower()- static_cast<unsigned short>(1));
     source->setExists(true);
+    queenCount++;
 }
 
 unsigned int Solver::countQueens() {
@@ -69,9 +81,14 @@ unsigned int Solver::countQueens() {
 void Solver::outlineQueens() {
     QueenVector retrieved;
     mapToVec<PlacementMap,QueenVector>(*board.getQueens(),retrieved);
-    std::copy_if(retrieved.begin(), retrieved.end(),
-            leftQueens.begin(),
-            [&](const Queen* queen) { return queen->doesExist();});
+//    std::copy_if(retrieved.begin(), retrieved.end(),
+//            leftQueens.begin(),
+//            [&](const Queen* queen) { return queen->doesExist();});
+    for (QueenVector::iterator it = retrieved.begin(); it != retrieved.end(); ++it) {
+        if (it.operator*()->doesExist()) {
+            leftQueens.push_back(it.operator*());
+        }
+    }
 }
 
 

@@ -14,6 +14,7 @@ class Solver {
     QueenVector leftQueens;
     MoveVector moves;
     unsigned int queenCount;
+    unsigned int target;
 public:
     Solver(Board& board) : board(board) {  }
 
