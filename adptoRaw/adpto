@@ -1,0 +1,6 @@
+from ubuntu:12.04
+run apt-get update
+run apt-get install -y build-essential g++
+add adpto.cpp /tmp/adpto.cpp
+workdir /tmp
+run g++ -std=c++0x -Wall adpto.cpp -o adpto
