@@ -23,7 +23,7 @@ public:
     Queen* get(unsigned short x, unsigned short y) { return queens.at(Pos(x,y));}
     short getSize() const { return size;}
     std::string toString();
-    std::map<Pos, Queen *>* getQueens() { return &queens; }
+    PlacementMap* getQueens() { return &queens; }
 };
 
 #endif //ADPTO_BOARD_H

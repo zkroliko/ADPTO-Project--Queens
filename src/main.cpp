@@ -12,7 +12,7 @@ using namespace std;
 int main() {
     unsigned int solution_size;
     unsigned short board_size;
-    /* Getting the problem specification */
+    /* Getting the board specification */
 
     cin >> board_size;
     DEBUG("Board size: " << board_size);
@@ -20,12 +20,12 @@ int main() {
     DEBUG("Will be solving solution of size: " << solution_size);
     // Getting the board from the loader
     DEBUG("Loading board");
-    Board* problem = Loader::load(board_size);
+    Board* board = Loader::load(board_size);
     DEBUG("Loading board finished");
     DEBUG("The board:");
-    DEBUG(problem->toString());
+    DEBUG(board->toString());
     DEBUG("Searching for a solution of size: " << solution_size);
-    Solver solver(*problem);
+    Solver solver(*board);
     if (solver.possible(solution_size)) {
         DEBUG("Solution found");
         for (Move* move : *solver.getSolution()) {
@@ -33,9 +33,16 @@ int main() {
             cout << " ";
             cout << std::get<0>(std::get<1>(*move)->getPosition()) << " " << std::get<1>(std::get<1>(*move)->getPosition());
             cout << endl;
+            // Deallocating moves as we go
+            delete move;
         }
     } else {
         DEBUG("Solution not found");
+    }
+
+    DEBUG("Cleaning up");
+    for (auto record: *board->getQueens()) {
+        delete record.second;
     }
 
     return 0;
