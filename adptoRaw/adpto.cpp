@@ -6,6 +6,7 @@
 #include <iostream>
 #include <tuple>
 #include<map>
+#include <algorithm>
 
 //#define DEBUG_ENABLED
 
@@ -51,7 +52,7 @@ public:
     void addQueen(Queen& queen, const unsigned short x, const unsigned short y);
     bool changeQueen(unsigned short x, unsigned short y, unsigned short power);
     bool removeQueen(unsigned short x, unsigned short y);
-    const bool occupied(unsigned short x, unsigned short y) { return queens.count(Pos(x,y)) > 0; }
+    bool occupied(unsigned short x, unsigned short y) { return queens.count(Pos(x,y)) > 0; }
     Queen* get(unsigned short x, unsigned short y) { return queens.at(Pos(x,y));}
     short getSize() const { return size;}
     std::string toString();
@@ -194,7 +195,16 @@ bool Board::changeQueen(unsigned short x, unsigned short y, unsigned short power
     }
 }
 
+/* ----------------------------------------
+ *
+ *  IMPLEMENTATIONS
+ *
+ * ----------------------------------------
+ */
+
 /* --------------------- Loader implementation */
+
+using namespace std;
 
 Board* Loader::load(const unsigned short size) {
     if (size > MAX_BOARD_SIZE) {
@@ -323,8 +333,7 @@ int main() {
     return 0;
 }
 
-#include <algorithm>
-#include <math.h>
+/* ------------- Queen implementation */
 
 void Queen::setPower(const unsigned short power) {
     Queen::power = std::max(MIN_QUEEN_POWER,std::min(power,MAX_QUEEN_POWER));
@@ -352,7 +361,7 @@ bool Queen::canJoin(const Queen &other) const {
     return exists && other.exists && power == other.power;
 }
 
-#include <algorithm>
+/* -------- Solver implementation */
 
 bool Solver::possible(unsigned int solutionRequirement) {
     target = kernelize(solutionRequirement);
@@ -412,6 +421,7 @@ void Solver::move(Queen *source, Queen *target) {
 void Solver::undo() {
     Queen* source = std::get<0>(*moves.back());
     Queen* target = std::get<1>(*moves.back());
+    delete moves.back();
     moves.pop_back();
     target->setPower(target->getPower()- static_cast<unsigned short>(1));
     source->setExists(true);

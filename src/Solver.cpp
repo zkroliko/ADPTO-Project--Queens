@@ -61,6 +61,7 @@ void Solver::move(Queen *source, Queen *target) {
 void Solver::undo() {
     Queen* source = std::get<0>(*moves.back());
     Queen* target = std::get<1>(*moves.back());
+    delete moves.back();
     moves.pop_back();
     target->setPower(target->getPower()- static_cast<unsigned short>(1));
     source->setExists(true);
@@ -81,9 +82,6 @@ unsigned int Solver::countQueens() {
 void Solver::outlineQueens() {
     QueenVector retrieved;
     mapToVec<PlacementMap,QueenVector>(*board.getQueens(),retrieved);
-//    std::copy_if(retrieved.begin(), retrieved.end(),
-//            leftQueens.begin(),
-//            [&](const Queen* queen) { return queen->doesExist();});
     for (QueenVector::iterator it = retrieved.begin(); it != retrieved.end(); ++it) {
         if (it.operator*()->doesExist()) {
             leftQueens.push_back(it.operator*());
