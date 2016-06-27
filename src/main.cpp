@@ -5,6 +5,7 @@
 #include "../include/Loader.h"
 #include "../include/Debugging.h"
 #include "../include/Solver.h"
+#include "../include/Move.h"
 
 using namespace std;
 
@@ -28,9 +29,9 @@ int main() {
     if (solver.possible(solution_size)) {
         DEBUG("Solution found");
         for (Move move : solver.getSolution()) {
-            cout << std::get<0>(std::get<0>(move)) << " " << std::get<1>(std::get<0>(move));
+            cout << std::get<0>(std::get<0>(move)->getPosition()) << " " << std::get<1>(std::get<0>(move)->getPosition());
             cout << " ";
-            cout << std::get<0>(std::get<1>(move)) << " " << std::get<1>(std::get<1>(move));
+            cout << std::get<0>(std::get<1>(move)->getPosition()) << " " << std::get<1>(std::get<1>(move)->getPosition());
             cout << endl;
         }
     } else {

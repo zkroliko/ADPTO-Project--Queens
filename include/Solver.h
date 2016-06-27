@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "Board.h"
+#include "Move.h"
 
 class Solver {
     Board& board;
@@ -26,8 +27,9 @@ public:
     }
 private:
     unsigned int kernelize(unsigned int target);
-    bool moveValid(Queen& source, Queen& target) const;
-    void move(const Queen& source, const Queen& target);
+    bool moveValid(const Queen& source, const Queen& target) const;
+    void move(Queen& source, Queen& target);
+    void undo();
 };
 
 

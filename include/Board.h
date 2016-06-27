@@ -2,12 +2,10 @@
 #define ADPTO_BOARD_H
 #include<map>
 #include "../include/Queen.h"
+#include "Queen.h"
+#include "Postition.h"
 
 const unsigned short MAX_SIZE = 128;
-
-typedef std::tuple<unsigned short,unsigned short> Pos;
-
-typedef std::tuple<Pos,Pos> Move;
 
 class Board {
 private:

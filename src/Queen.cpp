@@ -14,6 +14,22 @@ unsigned long long Queen::powerToExternal(const unsigned short power) {
     return static_cast<unsigned long long int> (pow(2, power));
 }
 
+bool Queen::isConnected(const Queen &other) const {
+    for (auto connection : connections) {
+        if (&connection.second == &other) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool Queen::canJoin(const Queen &other) const {
+    return exists && other.exists && power == other.power;
+}
+
+
+
 
 
 

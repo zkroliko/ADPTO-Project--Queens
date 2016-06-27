@@ -10,27 +10,33 @@ bool Solver::possible(unsigned int target) {
 
 unsigned int Solver::kernelize(unsigned int target) {
     unsigned int removed = 0;
-//    for (auto entry : *board.getQueens()) {
-//        if (entry.second->getConnections()->empty()) {
-//            board.getQueens()->erase(entry.first);
-//            removed++;
-//        }
-//    }
+
+    for (auto entry : *board.getQueens()) {
+        if (entry.second->getConnections()->empty()) {
+            entry.second->setExists(false);
+        }
+    }
     return target-removed;
 }
 
-bool Solver::moveValid(Queen &source, Queen &target) const{
-    for (auto connection : *source.getConnections()) {
-        if (&connection.second == &target) {
-            return true;
-        }
-    }
-    return false;
+bool Solver::moveValid(const Queen &source, const Queen &target) const{
+    return source.canJoin(target);
 }
 
-void Solver::move(const Queen &source, const Queen &target) {
-
+void Solver::move(Queen &source, Queen &target) {
+    source.setExists(false);
+    target.setPower(target.getPower()+ static_cast<unsigned short>(1));
+    moves.push_back(Move(&source,&target));
 }
+
+void Solver::undo() {
+    Queen* source = std::get<0>(moves.back());
+    Queen* target = std::get<0>(moves.back());
+    target->setPower(target->getPower()- static_cast<unsigned short>(1));
+    source->setExists(true);
+}
+
+
 
 
 

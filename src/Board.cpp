@@ -12,7 +12,7 @@ std::string Board::toString() {
     std::string result;
     for(unsigned short i = 0; i < size; ++i) {
         for(unsigned short j = 0; j < size; ++j) {
-            if (queens.count(Pos(i,j)) >0 ){
+            if (queens.count(Pos(i,j)) > 0 && queens[Pos(i, j)]->doesExist()){
                 result += std::to_string(Queen::powerToExternal(queens[Pos(i,j)]->getPower()));
             } else {
                 result += "0";

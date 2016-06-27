@@ -2,6 +2,7 @@
 #define ADPTO_QUEEN_H
 
 #include <map>
+#include "Postition.h"
 
 const unsigned short MAX_QUEEN_POWER = 60;
 const unsigned short MIN_QUEEN_POWER = 0;
@@ -21,13 +22,14 @@ enum Direction
 class Queen {
 private:
     unsigned short power;
+    Pos position;
     bool exists;
     std::map<Direction,Queen> connections;
 public:
 
-    Queen() { }
+    Queen() { exists = true ; }
 
-    Queen(unsigned short power) : power(power) { }
+    Queen(unsigned short power, const Pos &position) : power(power), position(position) { exists = true ;}
 
     inline unsigned short getPower() const {return power;}
 
@@ -43,11 +45,15 @@ public:
 
     static unsigned long long powerToExternal(const unsigned short);
 
-    bool isExists() const { return exists; }
+    bool doesExist() const { return exists; }
 
     void setExists(bool exists) { Queen::exists = exists; }
 
+    bool isConnected(const Queen& other) const;
 
+    bool canJoin(const Queen& other) const;
+
+    const Pos &getPosition() const { return position; }
 };
 
 #endif //ADPTO_QUEEN_H
