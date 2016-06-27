@@ -6,9 +6,13 @@
 #include "Board.h"
 #include "Move.h"
 
+typedef std::vector<Queen*> QueenVector;
+typedef std::vector<Move*> MoveVector;
+
 class Solver {
     Board board;
-    std::vector<Move*> moves;
+    QueenVector leftQueens;
+    MoveVector moves;
     unsigned int queenCount;
 public:
     Solver(Board& board) : board(board) {  }
@@ -28,6 +32,7 @@ private:
     void move(Queen *source, Queen *target);
     void undo();
     unsigned int countQueens();
+    void outlineQueens();
 
     bool check();
 };

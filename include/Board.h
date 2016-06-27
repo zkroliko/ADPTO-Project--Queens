@@ -7,10 +7,12 @@
 
 const unsigned short MAX_SIZE = 128;
 
+typedef std::map<Pos, Queen*> PlacementMap;
+
 class Board {
 private:
     unsigned short size;
-    std::map<Pos, Queen*> queens;
+    PlacementMap queens;
 public:
     Board() {}
     Board(unsigned short size);

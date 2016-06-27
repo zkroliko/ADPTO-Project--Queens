@@ -1,10 +1,13 @@
+#include <algorithm>
 #include "../include/Solver.h"
 #include "../include/Debugging.h"
+#include "../include/Tools.h"
 
 bool Solver::possible(unsigned int target) {
     target = kernelize(target);
     queenCount = countQueens();
     DEBUG("Solver: We have: " << queenCount << " queens with a target of " << target << std::endl );
+    outlineQueens();
     check();
     undo();
     undo();
@@ -62,6 +65,16 @@ unsigned int Solver::countQueens() {
     }
     return count;
 }
+
+void Solver::outlineQueens() {
+    QueenVector retrieved;
+    mapToVec<PlacementMap,QueenVector>(*board.getQueens(),retrieved);
+    std::copy_if(retrieved.begin(), retrieved.end(),
+            leftQueens.begin(),
+            [&](const Queen* queen) { return queen->doesExist();});
+}
+
+
 
 
 

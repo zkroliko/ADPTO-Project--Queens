@@ -4,6 +4,8 @@
 #include <map>
 #include "Postition.h"
 
+class Queen;
+
 const unsigned short MAX_QUEEN_POWER = 60;
 const unsigned short MIN_QUEEN_POWER = 0;
 
@@ -19,12 +21,14 @@ enum Direction
     bottom_right = 7
 };
 
+typedef std::map<Direction,Queen> ConnectionMap;
+
 class Queen {
 private:
     unsigned short power;
     Pos position;
     bool exists;
-    std::map<Direction,Queen> connections;
+    ConnectionMap connections;
 public:
 
     Queen() { exists = true ; }
