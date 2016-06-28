@@ -7,7 +7,7 @@
 #include "Move.h"
 
 typedef std::vector<Queen*> QueenVector;
-typedef std::vector<Move*> MoveVector;
+typedef std::vector<Move> MoveVector;
 
 class Solver {
     Board board;
@@ -24,7 +24,7 @@ public:
 
     bool possible(unsigned int target);
 
-    const std::vector<Move*> *getSolution() const {
+    const MoveVector *getSolution() const {
         return &moves;
     }
 private:

@@ -28,13 +28,11 @@ int main() {
     Solver solver(*board);
     if (solver.possible(solution_size)) {
         DEBUG("Solution found");
-        for (Move* move : *solver.getSolution()) {
-            cout << std::get<0>(std::get<0>(*move)->getPosition()) << " " << std::get<1>(std::get<0>(*move)->getPosition());
+        for (Move move : *solver.getSolution()) {
+            cout << std::get<0>(std::get<0>(move)->getPosition()) << " " << std::get<1>(std::get<0>(move)->getPosition());
             cout << " ";
-            cout << std::get<0>(std::get<1>(*move)->getPosition()) << " " << std::get<1>(std::get<1>(*move)->getPosition());
+            cout << std::get<0>(std::get<1>(move)->getPosition()) << " " << std::get<1>(std::get<1>(move)->getPosition());
             cout << endl;
-            // Deallocating moves as we go
-            delete move;
         }
     } else {
         DEBUG("Solution not found");

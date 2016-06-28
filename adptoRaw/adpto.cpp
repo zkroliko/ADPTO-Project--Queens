@@ -117,7 +117,7 @@ public:
 /* ---------- Solver */
 
 typedef std::vector<Queen*> QueenVector;
-typedef std::vector<Move*> MoveVector;
+typedef std::vector<Move> MoveVector;
 
 class Solver {
     Board board;
@@ -134,7 +134,7 @@ public:
 
     bool possible(unsigned int target);
 
-    const std::vector<Move*> *getSolution() const {
+    const MoveVector *getSolution() const {
         return &moves;
     }
 private:
@@ -145,9 +145,9 @@ private:
     unsigned int countQueens();
     void outlineQueens();
     void sortQueens();
-
     bool check();
 };
+
 
 
 /* ----------------------------------------
@@ -331,18 +331,15 @@ int main() {
     Solver solver(*board);
     if (solver.possible(solution_size)) {
         DEBUG("Solution found");
-        for (Move* move : *solver.getSolution()) {
-            cout << std::get<0>(std::get<0>(*move)->getPosition()) << " " << std::get<1>(std::get<0>(*move)->getPosition());
+        for (Move move : *solver.getSolution()) {
+            cout << std::get<0>(std::get<0>(move)->getPosition()) << " " << std::get<1>(std::get<0>(move)->getPosition());
             cout << " ";
-            cout << std::get<0>(std::get<1>(*move)->getPosition()) << " " << std::get<1>(std::get<1>(*move)->getPosition());
+            cout << std::get<0>(std::get<1>(move)->getPosition()) << " " << std::get<1>(std::get<1>(move)->getPosition());
             cout << endl;
-            // Deallocating moves as we go
-            delete move;
         }
     } else {
         DEBUG("Solution not found");
     }
-
     DEBUG("Cleaning up");
     for (auto record: *board->getQueens()) {
         delete record.second;
@@ -448,14 +445,14 @@ bool Solver::moveValid(const Queen &source, const Queen &target) const{
 void Solver::move(Queen *source, Queen *target) {
     source->setExists(false);
     target->setPower(target->getPower()+ static_cast<unsigned short>(1));
-    moves.push_back(new Move(source,target));
+    moves.push_back(Move(source,target));
     queenCount--;
 }
 
 void Solver::undo() {
-    Queen* source = std::get<0>(*moves.back());
-    Queen* target = std::get<1>(*moves.back());
-    delete moves.back();
+    Queen* source = std::get<0>(moves.back());
+    Queen* target = std::get<1>(moves.back());
+//    delete moves.back();
     moves.pop_back();
     target->setPower(target->getPower()- static_cast<unsigned short>(1));
     source->setExists(true);
