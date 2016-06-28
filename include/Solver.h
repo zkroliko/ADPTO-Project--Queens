@@ -35,7 +35,6 @@ private:
     unsigned int countQueens();
     void outlineQueens();
     void sortQueens();
-
     bool check();
 };
 
