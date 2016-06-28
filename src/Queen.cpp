@@ -28,6 +28,24 @@ bool Queen::canJoin(const Queen &other) const {
     return exists && other.exists && power == other.power;
 }
 
+unsigned short Queen::connectionCount() const {
+    return static_cast<unsigned short>(connections.size());
+}
+
+unsigned short Queen::viableConnectionCount() const {
+    unsigned short count = 0;
+    for (auto connection : connections) {
+        if (canJoin(*connection.second)){
+            count++;
+        }
+    }
+    return count;
+}
+
+
+
+
+
 
 
 

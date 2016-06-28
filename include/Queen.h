@@ -55,6 +55,10 @@ public:
 
     bool isConnected(const Queen& other) const;
 
+    unsigned short connectionCount() const;
+
+    unsigned short viableConnectionCount() const;
+
     bool canJoin(const Queen& other) const;
 
     const Pos &getPosition() const { return position; }

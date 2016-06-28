@@ -103,6 +103,10 @@ public:
 
     void setExists(bool exists) { Queen::exists = exists; }
 
+    unsigned short connectionCount() const;
+
+    unsigned short viableConnectionCount() const;
+
     bool isConnected(const Queen& other) const;
 
     bool canJoin(const Queen& other) const;
@@ -373,6 +377,20 @@ bool Queen::isConnected(const Queen &other) const {
 
 bool Queen::canJoin(const Queen &other) const {
     return exists && other.exists && power == other.power;
+}
+
+unsigned short Queen::connectionCount() const {
+    return static_cast<unsigned short>(connections.size());
+}
+
+unsigned short Queen::viableConnectionCount() const {
+    unsigned short count = 0;
+    for (auto connection : connections) {
+        if (canJoin(*connection.second)){
+            count++;
+        }
+    }
+    return count;
 }
 
 /* -------- Solver implementation */
