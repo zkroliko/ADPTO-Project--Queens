@@ -115,7 +115,6 @@ public:
 };
 
 /* ---------- Solver */
-
 typedef std::vector<Queen*> QueenVector;
 typedef std::vector<Move> MoveVector;
 
@@ -141,15 +140,18 @@ private:
     void kernelize();
     bool moveValid(const Queen& source, const Queen& target) const;
     void move(Queen *source, Queen *target);
-    void ignore(Queen* target);
+    void ignore(Queen* queen);
+    void ignoreUselessNeighbours(Queen *queen);
     bool uselessToNeighbours(Queen* queen);
-    void undo();
+    void undoStep();
+    void undoIgnores();
+    void undoMove();
+    void undoIgnore();
     unsigned int countQueens();
     void outlineQueens();
     void sortQueens();
     bool check();
 };
-
 
 
 /* ----------------------------------------
@@ -397,7 +399,6 @@ unsigned short Queen::viableConnectionCount() const {
 
 /* -------- Solver implementation */
 
-
 bool Solver::possible(unsigned int solutionRequirement) {
     target = solutionRequirement;
     queenCount = countQueens();
@@ -424,7 +425,7 @@ bool Solver::check() {
                     if (check()) {
                         return true;
                     } else {
-                        undo();
+                        undoStep();
                     }
                 }
             }
@@ -449,12 +450,30 @@ void Solver::kernelize() {
  */
 bool Solver::uselessToNeighbours(Queen *queen) {
     for (auto connection: *queen->getConnections()) {
-        if (connection.second->getPower() < queen->getPower()) {
+        if (connection.second->getPower() <= queen->getPower()) {
             return false;
         }
     }
     return true;
 }
+
+/* Uses above function to reduce some problems */
+void Solver::ignoreUselessNeighbours(Queen *queen) {
+    for (auto connection: *queen->getConnections()) {
+        if (connection.second->doesExist()) {
+            if (queen->doesExist()) {
+                if (queen->getPower() > connection.second->getPower() && uselessToNeighbours(connection.second)) {
+                    ignore(connection.second);
+                }
+            } else {
+                if (uselessToNeighbours(connection.second)) {
+                    ignore(connection.second);
+                }
+            }
+        }
+    }
+}
+
 
 bool Solver::moveValid(const Queen &source, const Queen &target) const{
     return source.canJoin(target);
@@ -464,22 +483,45 @@ void Solver::move(Queen *source, Queen *target) {
     source->setExists(false);
     target->setPower(target->getPower()+ static_cast<unsigned short>(1));
     moves.push_back(Move(source,target));
+    ignoreUselessNeighbours(source);
+    ignoreUselessNeighbours(target);
     queenCount--;
 }
 
 /* Cannot be used in the solution, we are now solving a problem for k:=k-1 */
-inline void Solver::ignore(Queen *target) {
-    move(target,target);
+inline void Solver::ignore(Queen *queen) {
+    move(queen,queen);
     target--;
 }
 
-void Solver::undo() {
+void Solver::undoStep() {
+    undoIgnores(); // ignored queens
+    undoMove(); // the move itself
+}
+
+/* Ignoring a queens still counts as move but with equal source and target
+ * ignoring is done after each move so we must first dispose of these reductions
+ */
+void Solver::undoIgnores() {
+    while (!moves.empty() && std::get<0>(moves.back()) == std::get<1>(moves.back())) {
+        undoIgnore();
+    }
+}
+
+/* Takes a single move from stack and restores the state before it */
+void Solver::undoMove() {
     Queen* source = std::get<0>(moves.back());
     Queen* target = std::get<1>(moves.back());
     moves.pop_back();
     target->setPower(target->getPower()- static_cast<unsigned short>(1));
     source->setExists(true);
     queenCount++;
+}
+
+/* Takes a single move from stack restores the state before it - treats it as an ignore-move   */
+void Solver::undoIgnore() {
+    undoMove();
+    target++;
 }
 
 unsigned int Solver::countQueens() {

@@ -31,9 +31,13 @@ private:
     void kernelize();
     bool moveValid(const Queen& source, const Queen& target) const;
     void move(Queen *source, Queen *target);
-    void ignore(Queen* target);
+    void ignore(Queen* queen);
+    void ignoreUselessNeighbours(Queen *queen);
     bool uselessToNeighbours(Queen* queen);
-    void undo();
+    void undoStep();
+    void undoIgnores();
+    void undoMove();
+    void undoIgnore();
     unsigned int countQueens();
     void outlineQueens();
     void sortQueens();
