@@ -144,6 +144,7 @@ private:
     void undo();
     unsigned int countQueens();
     void outlineQueens();
+    void sortQueens();
 
     bool check();
 };
@@ -410,6 +411,7 @@ bool Solver::check() {
     if (queenCount <= target) {
         return true;
     }
+    sortQueens();
     for (Queen * queen: leftQueens) {
         if (queen->doesExist()) {
             for (auto connection : *queen->getConnections()) {
@@ -479,12 +481,14 @@ void Solver::outlineQueens() {
             leftQueens.push_back(it.operator*());
         }
     }
+}
+
+void Solver::sortQueens() {
     std::sort(leftQueens.begin(),leftQueens.end(), [ ]( Queen* lhs, Queen* rhs )
     {
         return lhs->getPower() < rhs->getPower();
     });
 }
-
 
 
 
