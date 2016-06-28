@@ -28,9 +28,11 @@ public:
         return &moves;
     }
 private:
-    unsigned int kernelize(unsigned int target);
+    void kernelize();
     bool moveValid(const Queen& source, const Queen& target) const;
     void move(Queen *source, Queen *target);
+    void ignore(Queen* target);
+    bool uselessToNeighbours(Queen* queen);
     void undo();
     unsigned int countQueens();
     void outlineQueens();

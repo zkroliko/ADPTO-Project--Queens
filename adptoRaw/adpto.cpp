@@ -138,9 +138,11 @@ public:
         return &moves;
     }
 private:
-    unsigned int kernelize(unsigned int target);
+    void kernelize();
     bool moveValid(const Queen& source, const Queen& target) const;
     void move(Queen *source, Queen *target);
+    void ignore(Queen* target);
+    bool uselessToNeighbours(Queen* queen);
     void undo();
     unsigned int countQueens();
     void outlineQueens();
@@ -395,12 +397,15 @@ unsigned short Queen::viableConnectionCount() const {
 
 /* -------- Solver implementation */
 
+
 bool Solver::possible(unsigned int solutionRequirement) {
-    target = kernelize(solutionRequirement);
+    target = solutionRequirement;
     queenCount = countQueens();
-    DEBUG("Solver: We have: " << queenCount << " queens with a target of " << target << std::endl );
     outlineQueens();
-    DEBUG("After kernelization:");
+    DEBUG("Solver: We have: " << leftQueens.size() << " queens with a target of " << target << std::endl );
+    kernelize();
+    DEBUG("Solver: AFTER KERNELIZATION we have: " << leftQueens.size() << " queens with a target of " << target << std::endl );
+    DEBUG("Solver: Board after kernelization:");
     DEBUG(board.toString());
     DEBUG("Now running recursive function.");
     return check();
@@ -428,16 +433,27 @@ bool Solver::check() {
     return false;
 }
 
-unsigned int Solver::kernelize(unsigned int target) {
-    unsigned int removed = 0;
-
-    for (auto entry : *board.getQueens()) {
-        if (entry.second->getConnections()->empty()) {
-            entry.second->setExists(false);
-            removed++;
+void Solver::kernelize() {
+    for (auto queen : leftQueens) {
+        if (queen->getConnections()->empty()) {
+            ignore(queen);
         }
     }
-    return target-removed;
+}
+
+/*
+ *  If at current time there is no neighbour with lower power - all have higher power,
+ *  then we can assume that the current queen won't be useful for the solution
+ *  because no chain of reduction can pass through it,
+ *  therefore it is useless
+ */
+bool Solver::uselessToNeighbours(Queen *queen) {
+    for (auto connection: *queen->getConnections()) {
+        if (connection.second->getPower() < queen->getPower()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool Solver::moveValid(const Queen &source, const Queen &target) const{
@@ -451,10 +467,15 @@ void Solver::move(Queen *source, Queen *target) {
     queenCount--;
 }
 
+/* Cannot be used in the solution, we are now solving a problem for k:=k-1 */
+inline void Solver::ignore(Queen *target) {
+    move(target,target);
+    target--;
+}
+
 void Solver::undo() {
     Queen* source = std::get<0>(moves.back());
     Queen* target = std::get<1>(moves.back());
-//    delete moves.back();
     moves.pop_back();
     target->setPower(target->getPower()- static_cast<unsigned short>(1));
     source->setExists(true);
@@ -488,6 +509,7 @@ void Solver::sortQueens() {
         return lhs->getPower() > rhs->getPower();
     });
 }
+
 
 
 
