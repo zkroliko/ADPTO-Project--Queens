@@ -21,11 +21,13 @@ bool Solver::check() {
         return true;
     }
     sortQueens();
-    for (Queen * queen: leftQueens) {
-        if (queen->doesExist()) {
-            for (auto connection : *queen->getConnections()) {
-                if (queen->canJoin(*connection.second)) {
-                    move(queen,connection.second);
+    for (Queen *current: leftQueens) {
+        if (current->doesExist()) {
+            for (auto connection : *current->getConnections()) {
+                Queen *possibility = findViableQueen(current, connection.second);
+                if (current->canJoin(*possibility)) {
+                    // There is a viable connection to this direction
+                    move(current, possibility);
                     if (check()) {
                         return true;
                     } else {
@@ -33,6 +35,7 @@ bool Solver::check() {
                     }
                 }
             }
+            // No viable connection
         }
     }
     return false;
@@ -76,11 +79,6 @@ void Solver::ignoreUselessNeighbours(Queen *queen) {
             }
         }
     }
-}
-
-
-bool Solver::moveValid(const Queen &source, const Queen &target) const{
-    return source.canJoin(target);
 }
 
 void Solver::move(Queen *source, Queen *target) {
@@ -154,6 +152,15 @@ void Solver::sortQueens() {
     {
         return lhs->getPower() > rhs->getPower();
     });
+}
+
+Queen *Solver::findViableQueen(Queen *source, Queen *target) {
+    Direction direction = source->directionTo(target);
+    Queen* current = target;
+    while(!current->doesExist() && current->isConnected(direction)) {
+        current = current->getConnection(direction);
+    }
+    return current;
 }
 
 

@@ -23,6 +23,9 @@ bool Queen::isConnected(const Queen &other) const {
     return false;
 }
 
+bool Queen::isConnected(const Direction& direction) const {
+    return connections.count(direction) >0;
+}
 
 bool Queen::canJoin(const Queen &other) const {
     return exists && other.exists && power == other.power;
@@ -41,6 +44,17 @@ unsigned short Queen::viableConnectionCount() const {
     }
     return count;
 }
+
+const Direction Queen::directionTo(const Queen *other) const{
+    for (auto entry : connections ) {
+        if (entry.second == other) {
+            return entry.first;
+        }
+    }
+    std::__throw_logic_error("Connection improperly setup. One-way.");
+}
+
+
 
 
 

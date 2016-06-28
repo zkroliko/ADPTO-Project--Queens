@@ -26,18 +26,6 @@ typedef std::tuple<unsigned short,unsigned short> Pos;
 
 /* ------ Board */
 
-enum Direction
-{
-    top_left = 0,
-    top = 1,
-    top_right = 2,
-    left = 3,
-    right = 4,
-    bottom_left = 5,
-    bottom = 6,
-    bottom_right = 7
-};
-
 const unsigned short MAX_BOARD_SIZE = 128;
 
 typedef std::map<Pos, Queen*> PlacementMap;
@@ -71,6 +59,18 @@ public:
 const unsigned short MAX_QUEEN_POWER = 60;
 const unsigned short MIN_QUEEN_POWER = 0;
 
+enum Direction
+{
+    top_left = 0,
+    top = 1,
+    top_right = 2,
+    left = 3,
+    right = 4,
+    bottom_left = 5,
+    bottom = 6,
+    bottom_right = 7
+};
+
 typedef std::map<Direction,Queen*> ConnectionMap;
 
 class Queen {
@@ -103,15 +103,19 @@ public:
 
     void setExists(bool exists) { Queen::exists = exists; }
 
+    bool isConnected(const Queen& other) const;
+
+    bool isConnected(const Direction& direction) const;
+
     unsigned short connectionCount() const;
 
     unsigned short viableConnectionCount() const;
 
-    bool isConnected(const Queen& other) const;
-
     bool canJoin(const Queen& other) const;
 
     const Pos &getPosition() const { return position; }
+
+    const Direction directionTo(const Queen *other) const;
 };
 
 /* ---------- Solver */
@@ -138,7 +142,6 @@ public:
     }
 private:
     void kernelize();
-    bool moveValid(const Queen& source, const Queen& target) const;
     void move(Queen *source, Queen *target);
     void ignore(Queen* queen);
     void ignoreUselessNeighbours(Queen *queen);
@@ -151,7 +154,9 @@ private:
     void outlineQueens();
     void sortQueens();
     bool check();
+    Queen* findViableQueen(Queen *source, Queen *target);
 };
+
 
 
 /* ----------------------------------------
@@ -357,6 +362,7 @@ int main() {
 
 /* ------------- Queen implementation */
 
+
 void Queen::setPower(const unsigned short power) {
     Queen::power = std::max(MIN_QUEEN_POWER,std::min(power,MAX_QUEEN_POWER));
 }
@@ -378,6 +384,9 @@ bool Queen::isConnected(const Queen &other) const {
     return false;
 }
 
+bool Queen::isConnected(const Direction& direction) const {
+    return connections.count(direction) >0;
+}
 
 bool Queen::canJoin(const Queen &other) const {
     return exists && other.exists && power == other.power;
@@ -397,7 +406,19 @@ unsigned short Queen::viableConnectionCount() const {
     return count;
 }
 
+const Direction Queen::directionTo(const Queen *other) const {
+    for (auto entry : connections ) {
+        if (entry.second == other) {
+            return entry.first;
+        }
+    }
+    std::__throw_logic_error("Connection improperly setup. One-way.");
+}
+
+
+
 /* -------- Solver implementation */
+
 
 bool Solver::possible(unsigned int solutionRequirement) {
     target = solutionRequirement;
@@ -417,11 +438,13 @@ bool Solver::check() {
         return true;
     }
     sortQueens();
-    for (Queen * queen: leftQueens) {
-        if (queen->doesExist()) {
-            for (auto connection : *queen->getConnections()) {
-                if (queen->canJoin(*connection.second)) {
-                    move(queen,connection.second);
+    for (Queen *current: leftQueens) {
+        if (current->doesExist()) {
+            for (auto connection : *current->getConnections()) {
+                Queen *possibility = findViableQueen(current, connection.second);
+                if (current->canJoin(*possibility)) {
+                    // There is a viable connection to this direction
+                    move(current, possibility);
                     if (check()) {
                         return true;
                     } else {
@@ -429,6 +452,7 @@ bool Solver::check() {
                     }
                 }
             }
+            // No viable connection
         }
     }
     return false;
@@ -472,11 +496,6 @@ void Solver::ignoreUselessNeighbours(Queen *queen) {
             }
         }
     }
-}
-
-
-bool Solver::moveValid(const Queen &source, const Queen &target) const{
-    return source.canJoin(target);
 }
 
 void Solver::move(Queen *source, Queen *target) {
@@ -551,6 +570,17 @@ void Solver::sortQueens() {
         return lhs->getPower() > rhs->getPower();
     });
 }
+
+Queen *Solver::findViableQueen(Queen *source, Queen *target) {
+    Direction direction = source->directionTo(target);
+    Queen* current = target;
+    while(!current->doesExist() && current->isConnected(direction)) {
+        current = current->getConnection(direction);
+    }
+    return current;
+}
+
+
 
 
 

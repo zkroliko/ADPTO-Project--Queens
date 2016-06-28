@@ -20,6 +20,26 @@ enum Direction
     bottom = 6,
     bottom_right = 7
 };
+//
+//
+//struct reversedDirection{
+//    static std::map<Direction ,Direction > create_map()
+//    {
+//        std::map<Direction ,Direction > m;
+//        m[top_left] = bottom_right;
+//        m[top] = bottom;
+//        m[top_right] = bottom_left;
+//        m[left] = right;
+//        m[right] = left;
+//        m[bottom_left] = top_right;
+//        m[bottom] = top;
+//        m[bottom_right] = top_left;
+//        return m;
+//    }
+//    static const std::map<Direction ,Direction > reversedDir;
+//};
+//
+//const std::map<Direction ,Direction > reversedDirection::reversedDir = reversedDirection::create_map();
 
 typedef std::map<Direction,Queen*> ConnectionMap;
 
@@ -55,6 +75,8 @@ public:
 
     bool isConnected(const Queen& other) const;
 
+    bool isConnected(const Direction& direction) const;
+
     unsigned short connectionCount() const;
 
     unsigned short viableConnectionCount() const;
@@ -62,6 +84,8 @@ public:
     bool canJoin(const Queen& other) const;
 
     const Pos &getPosition() const { return position; }
+
+    const Direction directionTo(const Queen *other) const;
 };
 
 #endif //ADPTO_QUEEN_H

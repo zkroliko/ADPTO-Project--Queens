@@ -29,7 +29,6 @@ public:
     }
 private:
     void kernelize();
-    bool moveValid(const Queen& source, const Queen& target) const;
     void move(Queen *source, Queen *target);
     void ignore(Queen* queen);
     void ignoreUselessNeighbours(Queen *queen);
@@ -42,6 +41,7 @@ private:
     void outlineQueens();
     void sortQueens();
     bool check();
+    Queen* findViableQueen(Queen *source, Queen *target);
 };
 
 
