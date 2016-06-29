@@ -5,7 +5,7 @@
 #include "../include/Loader.h"
 #include "../include/Debugging.h"
 #include "../include/Solver.h"
-#include "../include/Move.h"
+#include "../include/Actions.h"
 
 using namespace std;
 
@@ -28,12 +28,9 @@ int main() {
     Solver solver(*board);
     if (solver.possible(solution_size)) {
         DEBUG("Solution found");
-        for (Move move : *solver.getSolution()) {
-            if (std::get<0>(move) != std::get<1>(move)) { // Not the same
-                cout << std::get<0>(std::get<0>(move)->getPosition()) << " " << std::get<1>(std::get<0>(move)->getPosition());
-                cout << " ";
-                cout << std::get<0>(std::get<1>(move)->getPosition()) << " " << std::get<1>(std::get<1>(move)->getPosition());
-                cout << endl;
+        for (auto move : *solver.getSolution()) {
+            if (!move.isIgnore()) {
+                cout << move.toString() << endl;
             }
         }
     } else {

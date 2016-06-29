@@ -2,6 +2,7 @@
 #define ADPTO_QUEEN_H
 
 #include <map>
+#include <vector>
 #include "Postition.h"
 
 class Queen;
@@ -20,28 +21,9 @@ enum Direction
     bottom = 6,
     bottom_right = 7
 };
-//
-//
-//struct reversedDirection{
-//    static std::map<Direction ,Direction > create_map()
-//    {
-//        std::map<Direction ,Direction > m;
-//        m[top_left] = bottom_right;
-//        m[top] = bottom;
-//        m[top_right] = bottom_left;
-//        m[left] = right;
-//        m[right] = left;
-//        m[bottom_left] = top_right;
-//        m[bottom] = top;
-//        m[bottom_right] = top_left;
-//        return m;
-//    }
-//    static const std::map<Direction ,Direction > reversedDir;
-//};
-//
-//const std::map<Direction ,Direction > reversedDirection::reversedDir = reversedDirection::create_map();
 
 typedef std::map<Direction,Queen*> ConnectionMap;
+typedef std::vector<Queen*> PossibleMoves;
 
 class Queen {
 private:
@@ -51,41 +33,28 @@ private:
     ConnectionMap connections;
 public:
 
-    Queen() { exists = true ; }
-
-    Queen(unsigned short power, const Pos &position) : power(power), position(position) { exists = true ;}
-
-    inline unsigned short getPower() const {return power;}
-
-    inline void addConnection(Direction direction, Queen* queen)  {connections[direction] = queen;}
-
-    inline Queen* getConnection (Direction direction) const {return connections.at(direction);};
-
-    inline ConnectionMap* getConnections() { return &connections; }
-
+    Queen() { exists = true; }
+    Queen(unsigned short power, const Pos &position) : power(power), position(position) { exists = true; }
+    inline unsigned short getPower() const { return power; }
+    inline void addConnection(Direction direction, Queen *queen) { connections[direction] = queen; }
+    inline Queen *getConnection(Direction direction) const { return connections.at(direction); };
+    inline ConnectionMap *getConnections() { return &connections; }
     void setPower(unsigned short power);
-
     static unsigned short powerFromExternal(const unsigned long long);
-
     static unsigned long long powerToExternal(const unsigned short);
-
     bool doesExist() const { return exists; }
-
     void setExists(bool exists) { Queen::exists = exists; }
-
-    bool isConnected(const Queen& other) const;
-
-    bool isConnected(const Direction& direction) const;
-
+    bool isConnected(const Queen &other) const;
+    bool isConnected(const Direction &direction) const;
+    bool useless();
     unsigned short connectionCount() const;
-
     unsigned short viableConnectionCount() const;
-
-    bool canJoin(const Queen& other) const;
-
+    bool canJoin(const Queen &other) const;
     const Pos &getPosition() const { return position; }
-
     const Direction directionTo(const Queen *other) const;
+
+    static Queen* findActiveQueen(Queen *source, Queen *target);
+    static Queen* findFutureJoinableQueen(Queen *source, Queen *target);
 };
 
 #endif //ADPTO_QUEEN_H

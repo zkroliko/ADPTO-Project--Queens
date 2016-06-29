@@ -4,7 +4,7 @@
 
 #include <vector>
 #include "Board.h"
-#include "Move.h"
+#include "Actions.h"
 
 typedef std::vector<Queen*> QueenVector;
 typedef std::vector<Move> MoveVector;
@@ -13,8 +13,9 @@ class Solver {
     Board board;
     QueenVector leftQueens;
     MoveVector moves;
-    unsigned int queenCount;
-    unsigned int target;
+    int queenCount;
+    int target;
+    int ignored = 0;
 public:
     Solver(Board& board) : board(board) {  }
 
@@ -28,20 +29,13 @@ public:
         return &moves;
     }
 private:
-    void kernelize();
     void move(Queen *source, Queen *target);
-    void ignore(Queen* queen);
-    void ignoreUselessNeighbours(Queen *queen);
-    bool uselessToNeighbours(Queen* queen);
-    void undoStep();
-    void undoIgnores();
+//    void ignoreUselessNeighbours(Queen *queen);
     void undoMove();
-    void undoIgnore();
     unsigned int countQueens();
     void outlineQueens();
     void sortQueens();
     bool check();
-    Queen* findViableQueen(Queen *source, Queen *target);
 };
 
 
