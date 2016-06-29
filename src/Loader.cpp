@@ -26,7 +26,7 @@ Board* Loader::load(const unsigned short size) {
             cin >> element;
             unsigned long long parsedLong = std::stoull(element);
             if (parsedLong > 0) {
-                power = static_cast<unsigned short>(Queen::powerFromExternal(parsedLong));
+                power = Queen::powerFromExternal(parsedLong);
                 Queen* created = new Queen(power, Pos(i,j));
                 board->addQueen(*created, i, j);
                 if (last) {

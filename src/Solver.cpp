@@ -2,7 +2,6 @@
 #include "../include/Solver.h"
 #include "../include/Debugging.h"
 #include "../include/Tools.h"
-#include <functional>
 
 bool Solver::possible(unsigned int solutionRequirement) {
     target = solutionRequirement;

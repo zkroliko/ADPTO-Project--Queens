@@ -5,11 +5,11 @@
 #include <iterator>
 #include <iostream>
 #include <tuple>
-#include<map>
+#include <map>
 #include <algorithm>
-#include<sstream>
+#include <sstream>
 
-//#define DEBUG_ENABLED
+#define DEBUG_ENABLED
 
 #ifdef DEBUG_ENABLED
 #define DEBUG(x) std::cerr << x << std::endl;
@@ -163,7 +163,6 @@ class Solver {
     MoveVector moves;
     int queenCount;
     int target;
-    int ignored = 0;
 public:
     Solver(Board& board) : board(board) {  }
 
@@ -250,7 +249,6 @@ bool Board::changeQueen(unsigned short x, unsigned short y, unsigned short power
 /* --------------------- Loader implementation */
 
 using namespace std;
-
 Board* Loader::load(const unsigned short size) {
     if (size > MAX_BOARD_SIZE) {
         __throw_invalid_argument("Invalid board size");
@@ -269,7 +267,7 @@ Board* Loader::load(const unsigned short size) {
             cin >> element;
             unsigned long long parsedLong = std::stoull(element);
             if (parsedLong > 0) {
-                power = static_cast<unsigned short>(Queen::powerFromExternal(parsedLong));
+                power = Queen::powerFromExternal(parsedLong);
                 Queen* created = new Queen(power, Pos(i,j));
                 board->addQueen(*created, i, j);
                 if (last) {
@@ -344,8 +342,6 @@ Board* Loader::load(const unsigned short size) {
     return board;
 }
 
-using namespace std;
-
 /* ------------- MAIN */
 
 int main() {
@@ -362,7 +358,7 @@ int main() {
     Board* board = Loader::load(board_size);
     DEBUG("Loading board finished");
     DEBUG("The board:");
-    DEBUG(board->toString());
+//    DEBUG(board->toString());
     DEBUG("Searching for a solution of size: " << solution_size);
     Solver solver(*board);
     if (solver.possible(solution_size)) {
@@ -541,13 +537,14 @@ bool Solver::possible(unsigned int solutionRequirement) {
     queenCount = countQueens();
     outlineQueens();
     DEBUG("Solver: We have: " << leftQueens.size() << " queens with a target of " << target << std::endl );
-    DEBUG(board.toString());
+//    DEBUG(board.toString());
     DEBUG("Now running recursive function.");
     return check();
 }
 
 bool Solver::check() {
     if (queenCount <= target) {
+        cout << queenCount << " and target " << target << endl;
         return true;
     }
     sortQueens();
