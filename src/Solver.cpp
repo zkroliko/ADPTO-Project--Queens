@@ -96,7 +96,9 @@ void Solver::outlineQueens() {
 void Solver::sortQueens() {
     std::sort(leftQueens.begin(),leftQueens.end(), [ ]( Queen* lhs, Queen* rhs )
     {
-        return lhs->getPower() < rhs->getPower();
+        unsigned short left = lhs->getPower()*POWER_WEIGHT+lhs->connectionCount()*CONNECTION_COUNT_WEIGHT;
+        unsigned short right = rhs->getPower()*POWER_WEIGHT+rhs->connectionCount()*CONNECTION_COUNT_WEIGHT;
+        return left < right;
     });
 }
 

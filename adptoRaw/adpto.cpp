@@ -7,6 +7,7 @@
 #include <tuple>
 #include<map>
 #include <algorithm>
+#include<sstream>
 
 //#define DEBUG_ENABLED
 
@@ -19,8 +20,9 @@
 class Loader;
 class Board;
 class Queen;
+class Move;
+class Ignore;
 
-typedef std::tuple<Queen*,Queen*> Move;
 
 typedef std::tuple<unsigned short,unsigned short> Pos;
 
@@ -72,6 +74,7 @@ enum Direction
 };
 
 typedef std::map<Direction,Queen*> ConnectionMap;
+typedef std::vector<Queen*> PossibleMoves;
 
 class Queen {
 private:
@@ -81,47 +84,78 @@ private:
     ConnectionMap connections;
 public:
 
-    Queen() { exists = true ; }
-
-    Queen(unsigned short power, const Pos &position) : power(power), position(position) { exists = true ;}
-
-    inline unsigned short getPower() const {return power;}
-
-    inline void addConnection(Direction direction, Queen* queen)  {connections[direction] = queen;}
-
-    inline Queen* getConnection (Direction direction) const {return connections.at(direction);};
-
-    inline ConnectionMap* getConnections() { return &connections; }
-
+    Queen() { exists = true; }
+    Queen(unsigned short power, const Pos &position) : power(power), position(position) { exists = true; }
+    inline unsigned short getPower() const { return power; }
+    inline void addConnection(Direction direction, Queen *queen) { connections[direction] = queen; }
+    inline Queen *getConnection(Direction direction) const { return connections.at(direction); };
+    inline ConnectionMap *getConnections() { return &connections; }
     void setPower(unsigned short power);
-
     static unsigned short powerFromExternal(const unsigned long long);
-
     static unsigned long long powerToExternal(const unsigned short);
-
     bool doesExist() const { return exists; }
-
     void setExists(bool exists) { Queen::exists = exists; }
-
-    bool isConnected(const Queen& other) const;
-
-    bool isConnected(const Direction& direction) const;
-
+    bool isConnected(const Queen &other) const;
+    bool isConnected(const Direction &direction) const;
+    bool useless();
     unsigned short connectionCount() const;
-
     unsigned short viableConnectionCount() const;
-
-    bool canJoin(const Queen& other) const;
-
+    bool canJoin(const Queen &other) const;
     const Pos &getPosition() const { return position; }
-
     const Direction directionTo(const Queen *other) const;
+
+    static Queen* findActiveQueen(Queen *source, Queen *target);
+    static Queen* findFutureJoinableQueen(Queen *source, Queen *target);
 };
+
+/* ---------- Actions */
+
+using namespace std;
+
+typedef vector<Ignore*> ReductionVector;
+
+class Action {
+public:
+    virtual short apply() = 0;
+    virtual short undo() = 0;
+    virtual string toString() = 0;
+    virtual bool isIgnore() = 0;
+};
+
+class Move: public Action {
+    Queen* source;
+    Queen* target;
+    ReductionVector reductions;
+public:
+    Move() { }
+    Move(Queen *source, Queen *target) : source(source), target(target) { }
+    virtual short apply();
+    virtual short undo();
+    virtual string toString();
+    virtual bool isIgnore() { return false; }
+    Queen *getSource() const { return source;}
+    Queen *getTarget() const { return target;}
+
+};
+
+class Ignore: public Action {
+    Queen* queen;
+public:
+    Ignore(Queen *queen) : queen(queen) { }
+    virtual short apply();
+    virtual short undo();
+    virtual bool isIgnore() { return true; }
+    Queen *getQueen() const { return queen;}
+};
+
 
 /* ---------- Solver */
 
 typedef std::vector<Queen*> QueenVector;
 typedef std::vector<Move> MoveVector;
+
+const unsigned short POWER_WEIGHT = 1;
+const unsigned short CONNECTION_COUNT_WEIGHT = 1;
 
 class Solver {
     Board board;
@@ -129,6 +163,7 @@ class Solver {
     MoveVector moves;
     int queenCount;
     int target;
+    int ignored = 0;
 public:
     Solver(Board& board) : board(board) {  }
 
@@ -142,21 +177,12 @@ public:
         return &moves;
     }
 private:
-    void kernelize();
     void move(Queen *source, Queen *target);
-    void ignore(Queen* queen);
-    void ignoreUselessNeighbours(Queen *queen);
-    bool uselessToNeighbours(Queen* queen);
-    void undoStep();
-    void undoIgnores();
     void undoMove();
-    void undoIgnore();
     unsigned int countQueens();
     void outlineQueens();
     void sortQueens();
     bool check();
-    Queen* findActiveQueen(Queen *source, Queen *target);
-    Queen* findFutureJoinableQueen(Queen *source, Queen *target);
 };
 
 
@@ -341,17 +367,15 @@ int main() {
     Solver solver(*board);
     if (solver.possible(solution_size)) {
         DEBUG("Solution found");
-        for (Move move : *solver.getSolution()) {
-            if (std::get<0>(move) != std::get<1>(move)) { // Not the same
-                cout << std::get<0>(std::get<0>(move)->getPosition()) << " " << std::get<1>(std::get<0>(move)->getPosition());
-                cout << " ";
-                cout << std::get<0>(std::get<1>(move)->getPosition()) << " " << std::get<1>(std::get<1>(move)->getPosition());
-                cout << endl;
+        for (auto move : *solver.getSolution()) {
+            if (!move.isIgnore()) {
+                cout << move.toString() << endl;
             }
         }
     } else {
         DEBUG("Solution not found");
     }
+
     DEBUG("Cleaning up");
     for (auto record: *board->getQueens()) {
         delete record.second;
@@ -407,7 +431,7 @@ unsigned short Queen::viableConnectionCount() const {
     return count;
 }
 
-const Direction Queen::directionTo(const Queen *other) const {
+const Direction Queen::directionTo(const Queen *other) const{
     for (auto entry : connections ) {
         if (entry.second == other) {
             return entry.first;
@@ -416,7 +440,99 @@ const Direction Queen::directionTo(const Queen *other) const {
     std::__throw_logic_error("Connection improperly setup. One-way.");
 }
 
+/*
+ *  If at current time there is no neighbour with lower power - all have higher power,
+ *  then we can assume that the current queen won't be useful for the solution
+ *  because no chain of reduction can pass through it,
+ *  therefore it is useless
+ */
+bool Queen::useless() {
+    for (auto connection: connections) {
+        Queen* other = Queen::findFutureJoinableQueen(this, connection.second);
+        if (other) {
+            return false;
+        }
+    }
+    return true;
+}
 
+/* Find a queen in line with which there is any possiblity of joining */
+Queen *Queen::findActiveQueen(Queen *source, Queen *target) {
+    if ((target->doesExist() && target->getPower() <= source->getPower())) {
+        return target;
+    }
+    Direction direction = source->directionTo(target);
+    Queen* current = target;
+    while(!current->doesExist() && current->isConnected(direction)) {
+        current = current->getConnection(direction);
+    }
+    if (current->doesExist() && current->getPower() <= source->getPower()) {
+        return current;
+    } else {
+        return nullptr;
+    }
+}
+
+/* Find an active(existing) queen */
+Queen *Queen::findFutureJoinableQueen(Queen *source, Queen *target) {
+    if (target->doesExist()) {
+        return target;
+    }
+    bool found = false;
+    Direction direction = source->directionTo(target);
+    Queen* current = target;
+    while(!current->doesExist() && current->isConnected(direction)) {
+        current = current->getConnection(direction);
+        found = true;
+    }
+    if (found) {
+        return current;
+    } else {
+        return nullptr;
+    }
+}
+
+/* -------- Actions implementation */
+
+
+/* Returns the number of reductions in this move */
+short Move::apply() {
+    source->setExists(false);
+    target->setPower(target->getPower()+ static_cast<unsigned short>(1));
+    return 0;
+}
+
+/* Returns the number of reverted reductions in this move */
+short Move::undo() {
+    for (auto reduction: reductions) {
+        reduction->undo();
+    }
+    target->setPower(target->getPower()- static_cast<unsigned short>(1));
+    source->setExists(true);
+    return static_cast<unsigned short>(reductions.size());
+}
+
+string Move::toString() {
+    std::stringstream ss;
+    ss << std::get<0>(source->getPosition()) << " " << std::get<1>(source->getPosition());
+    ss << " ";
+    ss << std::get<0>(target->getPosition()) << " " << std::get<1>(target->getPosition());
+    return ss.str();
+}
+
+short Ignore::apply() {
+    if (queen->doesExist()) {
+        queen->setExists(false);
+    } else {
+        std::__throw_logic_error("Cannot ignore already inactive queen");
+    }
+    return -1;
+}
+
+short Ignore::undo() {
+    queen->setExists(true);
+    return 1;
+}
 
 /* -------- Solver implementation */
 
@@ -425,9 +541,6 @@ bool Solver::possible(unsigned int solutionRequirement) {
     queenCount = countQueens();
     outlineQueens();
     DEBUG("Solver: We have: " << leftQueens.size() << " queens with a target of " << target << std::endl );
-    kernelize();
-    DEBUG("Solver: AFTER KERNELIZATION we have: " << leftQueens.size() << " queens with a target of " << target << std::endl );
-    DEBUG("Solver: Board after kernelization:");
     DEBUG(board.toString());
     DEBUG("Now running recursive function.");
     return check();
@@ -441,14 +554,14 @@ bool Solver::check() {
     for (Queen *current: leftQueens) {
         if (current->doesExist()) {
             for (auto connection : *current->getConnections()) {
-                Queen *possibility = findActiveQueen(current, connection.second);
+                Queen *possibility = Queen::findActiveQueen(current, connection.second);
                 if (possibility && current->canJoin(*possibility)) {
                     // There is a viable connection to this direction
                     move(current, possibility);
                     if (check()) {
                         return true;
                     } else {
-                        undoStep();
+                        undoMove();
                     }
                 }
             }
@@ -458,95 +571,19 @@ bool Solver::check() {
     return false;
 }
 
-void Solver::kernelize() {
-    for (auto queen : leftQueens) {
-        if (queen->getConnections()->empty()) {
-            ignore(queen);
-        }
-    }
-}
-
-/*
- *  If at current time there is no neighbour with lower power - all have higher power,
- *  then we can assume that the current queen won't be useful for the solution
- *  because no chain of reduction can pass through it,
- *  therefore it is useless
- */
-bool Solver::uselessToNeighbours(Queen *queen) {
-    for (auto connection: *queen->getConnections()) {
-        Queen* other = findFutureJoinableQueen(queen, connection.second);
-        if (other) {
-            return false;
-        }
-    }
-    return true;
-}
-
-/* Uses above function to reduce some problems */
-void Solver::ignoreUselessNeighbours(Queen *queen) {
-    for (auto connection: *queen->getConnections()) {
-        Queen* other = findActiveQueen(queen, connection.second);
-        if (other) {
-            if (queen->doesExist()) {
-                if (queen->getPower() > other->getPower() && uselessToNeighbours(other)) {
-                    ignore(other);
-                }
-            } else {
-                if (uselessToNeighbours(other)) {
-                    ignore(other);
-                }
-            }
-        }
-    }
-}
-
 void Solver::move(Queen *source, Queen *target) {
-    source->setExists(false);
-    target->setPower(target->getPower()+ static_cast<unsigned short>(1));
-    moves.push_back(Move(source,target));
-    ignoreUselessNeighbours(source);
-    ignoreUselessNeighbours(target);
+    Move move(source,target);
+    target -= move.apply();
+    moves.push_back(move);
+//    ignoreUselessNeighbours(source);
+//    ignoreUselessNeighbours(target);
     queenCount--;
 }
 
-/* Cannot be used in the solution, we are now solving a problem for k:=k-1 */
-inline void Solver::ignore(Queen *queen) {
-    if (queen->doesExist()) {
-        move(queen,queen);
-        target--;
-    } else {
-        std::__throw_logic_error("Cannot ignore already inactive queen");
-    }
-}
-
-void Solver::undoStep() {
-    undoIgnores(); // ignored queens
-    undoMove(); // the move itself
-}
-
-/* Ignoring a queens still counts as move but with equal source and target
- * ignoring is done after each move so we must first dispose of these reductions
- */
-void Solver::undoIgnores() {
-    while (!moves.empty() && std::get<0>(moves.back()) == std::get<1>(moves.back())) {
-        undoIgnore();
-    }
-}
-
-/* Takes a single move from stack and restores the state before it */
 void Solver::undoMove() {
-    Queen* source = std::get<0>(moves.back());
-    Queen* target = std::get<1>(moves.back());
+    target += moves.back().undo();
     moves.pop_back();
-    target->setPower(target->getPower()- static_cast<unsigned short>(1));
-    source->setExists(true);
     queenCount++;
-}
-
-/* Takes a single move from stack restores the state before it - treats it as an ignore-move   */
-void Solver::undoIgnore() {
-    undoMove();
-    target++;
 }
 
 unsigned int Solver::countQueens() {
@@ -573,53 +610,11 @@ void Solver::outlineQueens() {
 void Solver::sortQueens() {
     std::sort(leftQueens.begin(),leftQueens.end(), [ ]( Queen* lhs, Queen* rhs )
     {
-        return lhs->getPower() < rhs->getPower();
+        unsigned short left = lhs->getPower()*POWER_WEIGHT+lhs->connectionCount()*CONNECTION_COUNT_WEIGHT;
+        unsigned short right = rhs->getPower()*POWER_WEIGHT+rhs->connectionCount()*CONNECTION_COUNT_WEIGHT;
+        return left < right;
     });
 }
-
-/* Find a queen in line with which there is any possiblity of joining */
-Queen *Solver::findFutureJoinableQueen(Queen *source, Queen *target) {
-    if ((target->doesExist() && target->getPower() <= source->getPower())) {
-        return target;
-    }
-    bool found = false;
-    Direction direction = source->directionTo(target);
-    Queen* current = target;
-    while(!(current->doesExist() && current->getPower() <= source->getPower()) && current->isConnected(direction)) {
-        current = current->getConnection(direction);
-        found = true;
-    }
-    if (found) {
-        return current;
-    } else {
-        return nullptr;
-    }
-}
-
-/* Find an active(existing) queen */
-Queen *Solver::findActiveQueen(Queen *source, Queen *target) {
-    if (target->doesExist()) {
-        return target;
-    }
-    bool found = false;
-    Direction direction = source->directionTo(target);
-    Queen* current = target;
-    while(!current->doesExist() && current->isConnected(direction)) {
-        current = current->getConnection(direction);
-        found = true;
-    }
-    if (found) {
-        return current;
-    } else {
-        return nullptr;
-    }
-}
-
-
-
-
-
-
 
 
 
