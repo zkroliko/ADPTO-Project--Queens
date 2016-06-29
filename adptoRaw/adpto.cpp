@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <sstream>
 
-#define DEBUG_ENABLED
+//#define DEBUG_ENABLED
 
 #ifdef DEBUG_ENABLED
 #define DEBUG(x) std::cerr << x << std::endl;
@@ -543,7 +543,6 @@ bool Solver::possible(unsigned int solutionRequirement) {
 }
 
 bool Solver::check() {
-    cout << queenCount << " and target " << target << endl;
     if (queenCount <= target) {
         return true;
     }
