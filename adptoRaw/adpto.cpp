@@ -543,8 +543,8 @@ bool Solver::possible(unsigned int solutionRequirement) {
 }
 
 bool Solver::check() {
+    cout << queenCount << " and target " << target << endl;
     if (queenCount <= target) {
-        cout << queenCount << " and target " << target << endl;
         return true;
     }
     sortQueens();
