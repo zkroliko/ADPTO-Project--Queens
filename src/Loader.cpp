@@ -80,7 +80,7 @@ Board *Loader::load(const unsigned short size) {
 
     // Making the diagonal right to left connections
     connection_count = 0;
-    for (short i = 0; i > -size; --i) {
+    for (short i = size; i > -size; --i) {
         for (unsigned short j = 0; j < size; ++j) {
             unsigned short x = size - j + i;
             unsigned short y = j;

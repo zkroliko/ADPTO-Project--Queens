@@ -8,7 +8,6 @@ bool Solver::possible(unsigned int solutionRequirement) {
     queenCount = countQueens();
     outlineQueens();
     DEBUG("Solver: We have: " << leftQueens.size() << " queens with a target of " << target << std::endl );
-    DEBUG(board.toString());
     DEBUG("Now running recursive function.");
     return check();
 }
