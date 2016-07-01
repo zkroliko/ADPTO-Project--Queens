@@ -155,7 +155,7 @@ typedef std::vector<Queen*> QueenVector;
 typedef std::vector<Move> MoveVector;
 
 const unsigned short POWER_WEIGHT = 1;
-const unsigned short CONNECTION_COUNT_WEIGHT = 1;
+const unsigned short CONNECTION_COUNT_WEIGHT = 2;
 
 class Solver {
     Board board;

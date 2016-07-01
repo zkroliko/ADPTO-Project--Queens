@@ -1,0 +1,6 @@
+\select@language {polish}
+\select@language {polish}
+\contentsline {paragraph}{Prowadz\IeC {\k a}cy: dr hab. in\IeC {\.z}. Piotr Faliszewski \\\\\\\\ }{1}{section*.1}
+\contentsline {section}{\numberline {1}Reprezentacja problemu}{3}{section.1}
+\contentsline {subsection}{\numberline {1.1}Zapis warto\IeC {\'s}ci hetman\IeC {\'o}w}{3}{subsection.1.1}
+\contentsline {section}{\numberline {2}Wst\IeC {\k e}pne obserwacje}{3}{section.2}
