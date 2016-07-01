@@ -33,7 +33,7 @@ private:
     ConnectionMap connections;
 public:
 
-    Queen() { exists = true; }
+    Queen() { exists = true; power = 0; }
     Queen(unsigned short power, const Pos &position) : power(power), position(position) { exists = true; }
     inline unsigned short getPower() const { return power; }
     inline void addConnection(Direction direction, Queen *queen) { connections[direction] = queen; }

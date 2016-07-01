@@ -18,16 +18,10 @@ class Solver {
     MoveVector moves;
     int queenCount;
     int target;
-    int ignored = 0;
 public:
-    Solver(Board& board) : board(board) {  }
-
-    void setBoard(Board &board) {
-        Solver::board = board;
-    }
-
+    Solver(Board& board) : board(board) { queenCount =0; target=0; }
+    void setBoard(Board &board) { Solver::board = board;}
     bool possible(unsigned int target);
-
     const MoveVector *getSolution() const {
         return &moves;
     }

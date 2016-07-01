@@ -14,7 +14,7 @@ private:
     unsigned short size;
     PlacementMap queens;
 public:
-    Board() {}
+    Board() {size = 0;}
     Board(unsigned short size);
     void addQueen(Queen& queen, const unsigned short x, const unsigned short y);
     bool changeQueen(unsigned short x, unsigned short y, unsigned short power);
