@@ -46,10 +46,22 @@ W celach uproszczenia obliczeń wartości są reprezentowane jako wykładniki li
 
 \section{Wstępne obserwacje}
 
+Na wartość końcową hetmana da się nałożyć pewne ograniczenie:
+
+\textbf{Końcowa wartość hetmana $h$ nie może być wyższa od jego aktualnej wartości $V(h) * 2^n$ gdzie $n$ - liczba hetmanów w pionie, poziomie i na skosach (osiach).}
+
+Jest to łatwo udowodnić - każde bicie skierowane przeciwko hetmanowi podnosi jego wartość dwukrotnie. Bić może być \textit{w najlepszym wypadku} tyle ile hetmanów będących na tych samych osiach co dany hetman.
+
 \begin{figure}[!ht]
   \centering
       \includegraphics[scale=0.3]{obs1.png}
-  \caption{Przykładowy obszar z dwoma rodzajami pól.}
+  \caption{Zliczenie ilości hetmanów na poszczególnych osiach.}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+      \includegraphics[scale=0.3]{obs1a.png}
+  \caption{Lewo: Wartość hetmanów w mojej notacji Pawo: maksymalna ilość bić skierowana ku konkretnemu hetmanowi.}
 \end{figure}
 
 \end{document}
