@@ -92,10 +92,12 @@ void Solver::outlineQueens() {
 }
 
 void Solver::sortQueens() {
-    std::sort(leftQueens.begin(),leftQueens.end(), [ ]( Queen* lhs, Queen* rhs )
+    std::sort(leftQueens.begin(),leftQueens.end(), []( Queen* lhs, Queen* rhs )
     {
-        unsigned short left = lhs->getPower()*POWER_WEIGHT+lhs->connectionCount()*CONNECTION_COUNT_WEIGHT;
-        unsigned short right = rhs->getPower()*POWER_WEIGHT+rhs->connectionCount()*CONNECTION_COUNT_WEIGHT;
+        unsigned short leftConnectionCount = lhs->connectionCount();
+        unsigned short rightConnectionCount = rhs->connectionCount();
+        unsigned short left = lhs->getPower()*POWER_WEIGHT+leftConnectionCount*CONNECTION_COUNT_WEIGHT;
+        unsigned short right = rhs->getPower()*POWER_WEIGHT+rightConnectionCount*CONNECTION_COUNT_WEIGHT;
         return left < right;
     });
 }

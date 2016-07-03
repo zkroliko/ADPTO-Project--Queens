@@ -8,11 +8,21 @@
 const unsigned short MAX_BOARD_SIZE = 128;
 
 typedef std::map<Pos, Queen*> PlacementMap;
+typedef std::map<unsigned short, unsigned short> QueenCount;
+
+enum Axes
+{
+    horizontal = 0, vertical = 1, diagonal_left = 2, diagonal_right = 3
+};
 
 class Board {
 private:
     unsigned short size;
     PlacementMap queens;
+    QueenCount rowQueenCount;
+    QueenCount columnQueenCount;
+    QueenCount leftDiagonalQueenCount;
+    QueenCount rightDiagonalQueenCount;
 public:
     Board() {size = 0;}
     Board(unsigned short size);
@@ -24,6 +34,16 @@ public:
     short getSize() const { return size;}
     std::string toString();
     PlacementMap* getQueens() { return &queens; }
+    unsigned short limitOfMovesToPosition(const Pos& pos);
+    inline unsigned short posToAxis(const Pos& pos, const Axes);
+    inline unsigned short posToRow(const Pos& pos);
+    inline unsigned short posToColumn(const Pos& pos);
+    inline unsigned short posToLeftDiagonal(const Pos& pos);
+    inline unsigned short posToRightDiagonal(const Pos& pos);
+
+private:
+    void incrementQueenCounts(const Pos& pos);
+    void decrementQueenCounts(const Pos& pos);
 };
 
 #endif //ADPTO_BOARD_H
