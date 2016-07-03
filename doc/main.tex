@@ -36,15 +36,29 @@ Informatyka 2015/16}
 
 \newpage
 
+\section{Uwagi}
+
+Moja filozofia zapisu: \textbf{hetmany bijące nie zmieniają miejsca tylko znikają na rzecz zbitego} - taki obraz przyjąłem gdyż łatwiej było go rozpisać, mniej dynamiki. Często zapisuję bicie jako redukcję. Nie zmienia to w żaden sposób istoty algorytmu tylko jego opis, który mógłby być mylący bez tej notki.
+
 \section{Reprezentacja problemu}
 
 Plansza została przedstawiona jako \textbf{graf nieskierowany}, w którym każdy węzeł połączony jest z innymi co najwyżej 8 krawędziami.
 
 \subsection{Zapis wartości hetmanów}
 
-W celach uproszczenia obliczeń wartości są reprezentowane jako wykładniki liczby 2 \textbf{przesunięte} jednak o 1 w górę, tak aby prawidłowo oddać arytmetykę.
+W celach uproszczenia obliczeń wartości są reprezentowane jako wykładniki liczby 2.
+
+\subsection{Krótki słownik moich pojęć - w razie wątpliwości}
+
+\begin{itemize}
+\item osie - pion, poziom i skosy
+\end{itemize}
+
+\clearpage
 
 \section{Wstępne obserwacje}
+
+\section{Ogranicznie maksymalnej wartości hetmana}
 
 Na wartość końcową hetmana da się nałożyć pewne ograniczenie:
 
@@ -58,10 +72,21 @@ Jest to łatwo udowodnić - każde bicie skierowane przeciwko hetmanowi podnosi 
   \caption{Zliczenie ilości hetmanów na poszczególnych osiach.}
 \end{figure}
 
+\clearpage 
+
 \begin{figure}[!ht]
   \centering
-      \includegraphics[scale=0.3]{obs1a.png}
-  \caption{Lewo: Wartość hetmanów w mojej notacji Pawo: maksymalna ilość bić skierowana ku konkretnemu hetmanowi.}
+      \includegraphics[scale=0.25]{obs1a.png}
+  \caption{\textit{Lewo:} Wartość hetmanów w mojej notacji \textit{Prawo:} maksymalna ilość bić skierowana ku konkretnemu hetmanowi.\textit{ Dół:} Górne ograniczenie na wartość końcową hetmanów. Na czerwono hetmany, które nie mogą być końcowe dla K=1.}
+  
 \end{figure}
+
+Jak zademonstrowano na powyższym przykładzie możemy \textbf{wykluczyć} pewne kombinacje(o wielkości K) hetmanów z bycia końcowymi. Warunkiem wykluczenia jest niemożliwość uzyskania przez tą kombinację wartości będącej sumą wartości wszystkich hetmanów na planszy. Jest to pewne uproszczenie problemu, część postaci rozwiązania.
+
+\paragraph{Bezpośrednio nieużyteczne -}liczba tych kombinacji wynosi $\binom{N} {K}$ gdzie $N$ to liczba hetmanów na planszy a $K$ to ilość hetmanów końcowych.
+
+\subsubsection{Heurystyka}
+
+Możemy się zatem spodziewać, że pewne hetmany zostaną zredukowane "wcześniej niż później", a więc mamy nałożoną jakąś \textbf{kolejność przeszukiwania} przestrzeni rozwiązań. \textbf{Skoro mniejszy potencjał hetmana wiąże się z niemożnością bycia końcowym hetmanem to może powinniśmy ruszać się  wcześniej tymi z mniejszym potencjałem?}.
 
 \end{document}
