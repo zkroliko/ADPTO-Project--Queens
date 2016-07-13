@@ -6,4 +6,5 @@
 \BOOKMARK [1][-]{section.4}{Ogranicznie maksymalnej wartosci hetmana}{}% 6
 \BOOKMARK [2][-]{subsubsection.4.0.1}{Heurystyka}{section.4}% 7
 \BOOKMARK [1][-]{section.5}{Algorytm}{}% 8
-\BOOKMARK [1][-]{section.6}{Generator scenariuszy}{}% 9
+\BOOKMARK [2][-]{subsection.5.1}{SortConnections}{section.5}% 9
+\BOOKMARK [1][-]{section.6}{Generator scenariuszy}{}% 10

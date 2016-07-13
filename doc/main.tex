@@ -87,24 +87,32 @@ Możemy się zatem spodziewać, że pewne hetmany zostaną zredukowane "wcześni
 
 \section{Algorytm}
 
-Pominąłem opis wczytywanie wejścia oraz wypisywania rozwiązania.
+Algorytm przeszukuje przestrzeń rozwiązań za pomocą wywołań rekurencyjnych modyfikując za każdym razem planszę. Kolejność przeszukiwania jest heurystyką, która zostanie później opisana.
 
 \begin{lstlisting}
 bool recursiveCheck():
-	if achievedTarget:
-		true
+	if achievedTarget():
+		return true
 	else:
 		sortQueens()
 		for queen in board:
 			connections = queen.possibleConnections()
 			sortConnections()
 			for connection in connections:
+				move(connection)
 				if recursiveCheck():
 					return true
 	// Nie znaleziono rozwiazania	
 		undoMove()	
-		false
+		return false
+		
+bool achievedTarget():
+	return currentQueens <= targetQueens
 \end{lstlisting}
+
+\subsection{SortConnections}
+
+Zadaniem tego algorytmu jest porządkowanie połączeń wychodzących z danego hetmana. W końcowej wersji nie nałożyłem tutaj żadnego heurystycznego porządku - wszystkie testowane heurystyki okazały się nieużyteczne.
 
 \section{Generator scenariuszy}
 
