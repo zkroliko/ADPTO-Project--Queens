@@ -2,10 +2,6 @@
 #include <math.h>
 #include "../include/Queen.h"
 
-void Queen::setPower(const unsigned short power) {
-    Queen::power = std::max(MIN_QUEEN_POWER,std::min(power,MAX_QUEEN_POWER));
-}
-
 unsigned short Queen::powerFromExternal(const unsigned long long power) {
     return static_cast<unsigned short>(log2(power));
 }
@@ -21,18 +17,6 @@ bool Queen::isConnected(const Queen &other) const {
         }
     }
     return false;
-}
-
-bool Queen::isConnected(const Direction& direction) const {
-    return connections.count(direction) >0;
-}
-
-bool Queen::canJoin(const Queen &other) const {
-    return exists && other.exists && power == other.power;
-}
-
-unsigned short Queen::connectionCount() const {
-    return static_cast<unsigned short>(connections.size());
 }
 
 unsigned short Queen::viableConnectionCount() const {

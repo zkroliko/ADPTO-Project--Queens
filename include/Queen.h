@@ -39,17 +39,17 @@ public:
     inline void addConnection(Direction direction, Queen *queen) { connections[direction] = queen; }
     inline Queen *getConnection(Direction direction) const { return connections.at(direction); };
     inline ConnectionMap *getConnections() { return &connections; }
-    void setPower(unsigned short power);
+    inline void setPower(unsigned short power) { Queen::power = std::max(MIN_QUEEN_POWER,std::min(power,MAX_QUEEN_POWER));}
     static unsigned short powerFromExternal(const unsigned long long);
     static unsigned long long powerToExternal(const unsigned short);
     bool doesExist() const { return exists; }
     void setExists(bool exists) { Queen::exists = exists; }
     bool isConnected(const Queen &other) const;
-    bool isConnected(const Direction &direction) const;
+    bool isConnected(const Direction &direction) const {return connections.count(direction) >0;};
     bool useless();
-    unsigned short connectionCount() const;
+    unsigned short connectionCount() const {return static_cast<unsigned short>(connections.size());};
     unsigned short viableConnectionCount() const;
-    bool canJoin(const Queen &other) const;
+    bool canJoin(const Queen &other) const {return exists && other.exists && power == other.power;};
     const Pos &getPosition() const { return position; }
     const Direction directionTo(const Queen *other) const;
 

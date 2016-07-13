@@ -38,30 +38,10 @@ bool Solver::check() {
     return false;
 }
 
-///* Uses above function to reduce some problems */
-//void Solver::ignoreUselessNeighbours(Queen *queen) {
-//    for (auto connection: *queen->getConnections()) {
-//        Queen* other = connection.second;
-//        if (other->doesExist()) {
-//            if (queen->doesExist()) {
-//                if (queen->getPower() > other->getPower() && other->useless()) {
-//                    ignore(other);
-//                }
-//            } else {
-//                if (other->useless()) {
-//                    ignore(other);
-//                }
-//            }
-//        }
-//    }
-//}
-
 void Solver::move(Queen *source, Queen *target) {
     Move move(source,target);
     target -= move.apply();
     moves.push_back(move);
-//    ignoreUselessNeighbours(source);
-//    ignoreUselessNeighbours(target);
     queenCount--;
 }
 

@@ -44,19 +44,19 @@ bool Board::changeQueen(unsigned short x, unsigned short y, unsigned short power
     }
 }
 
-unsigned short Board::posToRow(const Pos &pos) {
+inline unsigned short Board::posToRow(const Pos &pos) {
     return std::get<0>(pos);
 }
 
-unsigned short Board::posToColumn(const Pos &pos) {
+inline unsigned short Board::posToColumn(const Pos &pos) {
     return std::get<1>(pos);
 }
 
-unsigned short Board::posToLeftDiagonal(const Pos &pos) {
+inline unsigned short Board::posToLeftDiagonal(const Pos &pos) {
     return static_cast<unsigned short>(std::get<0>(pos) - std::get<1>(pos) + size - 1);
 }
 
-unsigned short Board::posToRightDiagonal(const Pos &pos) {
+inline unsigned short Board::posToRightDiagonal(const Pos &pos) {
     return static_cast<unsigned short>(2*size-2-std::get<0>(pos) - std::get<1>(pos));
 }
 

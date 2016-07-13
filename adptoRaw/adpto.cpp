@@ -25,6 +25,12 @@ class Ignore;
 
 
 typedef std::tuple<unsigned short,unsigned short> Pos;
+typedef std::map<unsigned short, unsigned short> QueenCount;
+
+enum Axes
+{
+    horizontal = 0, vertical = 1, diagonal_left = 2, diagonal_right = 3
+};
 
 /* ------ Board */
 
@@ -36,8 +42,12 @@ class Board {
 private:
     unsigned short size;
     PlacementMap queens;
+    QueenCount rowQueenCount;
+    QueenCount columnQueenCount;
+    QueenCount leftDiagonalQueenCount;
+    QueenCount rightDiagonalQueenCount;
 public:
-    Board() {}
+    Board() {size = 0;}
     Board(unsigned short size);
     void addQueen(Queen& queen, const unsigned short x, const unsigned short y);
     bool changeQueen(unsigned short x, unsigned short y, unsigned short power);
@@ -47,6 +57,16 @@ public:
     short getSize() const { return size;}
     std::string toString();
     PlacementMap* getQueens() { return &queens; }
+    unsigned short limitOfMovesToPosition(const Pos& pos);
+    inline unsigned short posToAxis(const Pos& pos, const Axes);
+    inline unsigned short posToRow(const Pos& pos);
+    inline unsigned short posToColumn(const Pos& pos);
+    inline unsigned short posToLeftDiagonal(const Pos& pos);
+    inline unsigned short posToRightDiagonal(const Pos& pos);
+
+private:
+    void incrementQueenCounts(const Pos& pos);
+    void decrementQueenCounts(const Pos& pos);
 };
 
 /* --------- Loader */
@@ -84,29 +104,30 @@ private:
     ConnectionMap connections;
 public:
 
-    Queen() { exists = true; }
+    Queen() { exists = true; power = 0; }
     Queen(unsigned short power, const Pos &position) : power(power), position(position) { exists = true; }
     inline unsigned short getPower() const { return power; }
     inline void addConnection(Direction direction, Queen *queen) { connections[direction] = queen; }
     inline Queen *getConnection(Direction direction) const { return connections.at(direction); };
     inline ConnectionMap *getConnections() { return &connections; }
-    void setPower(unsigned short power);
+    inline void setPower(unsigned short power) { Queen::power = std::max(MIN_QUEEN_POWER,std::min(power,MAX_QUEEN_POWER));}
     static unsigned short powerFromExternal(const unsigned long long);
     static unsigned long long powerToExternal(const unsigned short);
     bool doesExist() const { return exists; }
     void setExists(bool exists) { Queen::exists = exists; }
     bool isConnected(const Queen &other) const;
-    bool isConnected(const Direction &direction) const;
+    bool isConnected(const Direction &direction) const {return connections.count(direction) >0;};
     bool useless();
-    unsigned short connectionCount() const;
+    unsigned short connectionCount() const {return static_cast<unsigned short>(connections.size());};
     unsigned short viableConnectionCount() const;
-    bool canJoin(const Queen &other) const;
+    bool canJoin(const Queen &other) const {return exists && other.exists && power == other.power;};
     const Pos &getPosition() const { return position; }
     const Direction directionTo(const Queen *other) const;
 
     static Queen* findActiveQueen(Queen *source, Queen *target);
     static Queen* findFutureJoinableQueen(Queen *source, Queen *target);
 };
+
 
 /* ---------- Actions */
 
@@ -209,6 +230,7 @@ Board::Board(unsigned short size) : size(std::min(MAX_BOARD_SIZE,size)) {}
 
 void Board::addQueen(Queen& queen, const unsigned short x, const unsigned short y) {
     Board::queens[Pos(x,y)] = &queen;
+    incrementQueenCounts(Pos(x,y));
 }
 
 std::string Board::toString() {
@@ -230,6 +252,7 @@ std::string Board::toString() {
 bool Board::removeQueen(unsigned short x, unsigned short y) {
     if (queens.count(Pos(x,y)) > 0 ) {
         queens[Pos(x,y)]->setExists(false);
+        decrementQueenCounts(Pos(x,y));
         return true;
     } else {
         return false;
@@ -244,6 +267,73 @@ bool Board::changeQueen(unsigned short x, unsigned short y, unsigned short power
         return false;
     }
 }
+
+inline unsigned short Board::posToRow(const Pos &pos) {
+    return std::get<0>(pos);
+}
+
+inline unsigned short Board::posToColumn(const Pos &pos) {
+    return std::get<1>(pos);
+}
+
+inline unsigned short Board::posToLeftDiagonal(const Pos &pos) {
+    return static_cast<unsigned short>(std::get<0>(pos) - std::get<1>(pos) + size - 1);
+}
+
+inline unsigned short Board::posToRightDiagonal(const Pos &pos) {
+    return static_cast<unsigned short>(2*size-2-std::get<0>(pos) - std::get<1>(pos));
+}
+
+unsigned short Board::posToAxis(const Pos &pos, const Axes axis) {
+    switch( axis )
+    {
+        case horizontal:
+            return posToRow(pos);
+        case vertical:
+            return posToColumn(pos);
+        case diagonal_left:
+            return posToLeftDiagonal(pos);
+        case diagonal_right:
+            return posToRightDiagonal(pos);
+
+        default:
+            std::__throw_logic_error("No such axis");
+    }
+}
+
+void Board::incrementQueenCounts(const Pos &pos) {
+    QueenCount* axes[] = {&rowQueenCount,&columnQueenCount,&leftDiagonalQueenCount,&rightDiagonalQueenCount};
+    for (unsigned int i = 0; i < 4; ++i) {
+        if (axes[i]->count(posToAxis(pos,Axes(i))) > 0) {
+            (*axes[i])[posToAxis(pos,Axes(i))]++;
+        } else {
+            (*axes[i])[posToAxis(pos,Axes(i))] = 1;
+        }
+    }
+}
+
+void Board::decrementQueenCounts(const Pos &pos) {
+    QueenCount* axes[] = {&rowQueenCount,&columnQueenCount,&leftDiagonalQueenCount,&rightDiagonalQueenCount};
+    for (unsigned int i = 0; i < 4; ++i) {
+        if (axes[i]->count(posToAxis(pos,Axes(i))) > 0) {
+            (*axes[i])[posToAxis(pos,Axes(i))]--;
+        } else {
+            std::__throw_logic_error("Decrementing should only be done after incrementing - probably there is no such queen");
+        }
+    }
+}
+
+unsigned short Board::limitOfMovesToPosition(const Pos& pos) {
+    unsigned short total = 0;
+    QueenCount* axes[] = {&rowQueenCount,&columnQueenCount,&leftDiagonalQueenCount,&rightDiagonalQueenCount};
+    for (unsigned int i = 0; i < 4; ++i) {
+        if (axes[i]->count(posToAxis(pos,Axes(i))) > 0) {
+            total += (*axes[i])[posToAxis(pos,Axes(i))] - 1;
+        }
+    }
+    return total;
+}
+
 
 
 /* --------------------- Loader implementation */
@@ -382,10 +472,6 @@ int main() {
 /* ------------- Queen implementation */
 
 
-void Queen::setPower(const unsigned short power) {
-    Queen::power = std::max(MIN_QUEEN_POWER,std::min(power,MAX_QUEEN_POWER));
-}
-
 unsigned short Queen::powerFromExternal(const unsigned long long power) {
     return static_cast<unsigned short>(log2(power));
 }
@@ -401,18 +487,6 @@ bool Queen::isConnected(const Queen &other) const {
         }
     }
     return false;
-}
-
-bool Queen::isConnected(const Direction& direction) const {
-    return connections.count(direction) >0;
-}
-
-bool Queen::canJoin(const Queen &other) const {
-    return exists && other.exists && power == other.power;
-}
-
-unsigned short Queen::connectionCount() const {
-    return static_cast<unsigned short>(connections.size());
 }
 
 unsigned short Queen::viableConnectionCount() const {
@@ -557,12 +631,11 @@ bool Solver::check() {
                 move(current, possibility);
                 if (check()) {
                     return true;
-                } else {
-                    undoMove();
                 }
             }
         }
     }
+    undoMove();
     return false;
 }
 
@@ -610,6 +683,19 @@ void Solver::sortQueens() {
         return left < right;
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
