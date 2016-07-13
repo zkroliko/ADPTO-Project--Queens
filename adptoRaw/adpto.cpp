@@ -546,19 +546,21 @@ bool Solver::check() {
     sortQueens();
     for (Queen *current: leftQueens) {
         if (current->doesExist()) {
+            QueenVector possibilities;
             for (auto connection : *current->getConnections()) {
                 Queen *possibility = Queen::findActiveQueen(current, connection.second);
                 if (possibility && current->canJoin(*possibility)) {
-                    // There is a viable connection to this direction
-                    move(current, possibility);
-                    if (check()) {
-                        return true;
-                    } else {
-                        undoMove();
-                    }
+                    possibilities.push_back(possibility);
                 }
             }
-            // No viable connection
+            for (auto possibility : possibilities) {
+                move(current, possibility);
+                if (check()) {
+                    return true;
+                } else {
+                    undoMove();
+                }
+            }
         }
     }
     return false;
@@ -568,8 +570,6 @@ void Solver::move(Queen *source, Queen *target) {
     Move move(source,target);
     target -= move.apply();
     moves.push_back(move);
-//    ignoreUselessNeighbours(source);
-//    ignoreUselessNeighbours(target);
     queenCount--;
 }
 
@@ -601,14 +601,15 @@ void Solver::outlineQueens() {
 }
 
 void Solver::sortQueens() {
-    std::sort(leftQueens.begin(),leftQueens.end(), [ ]( Queen* lhs, Queen* rhs )
+    std::sort(leftQueens.begin(),leftQueens.end(), []( Queen* lhs, Queen* rhs )
     {
-        unsigned short left = lhs->getPower()*POWER_WEIGHT+lhs->connectionCount()*CONNECTION_COUNT_WEIGHT;
-        unsigned short right = rhs->getPower()*POWER_WEIGHT+rhs->connectionCount()*CONNECTION_COUNT_WEIGHT;
+        unsigned short leftConnectionCount = lhs->connectionCount();
+        unsigned short rightConnectionCount = rhs->connectionCount();
+        unsigned short left = lhs->getPower()*POWER_WEIGHT+leftConnectionCount*CONNECTION_COUNT_WEIGHT;
+        unsigned short right = rhs->getPower()*POWER_WEIGHT+rightConnectionCount*CONNECTION_COUNT_WEIGHT;
         return left < right;
     });
 }
-
 
 
 

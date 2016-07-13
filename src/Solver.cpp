@@ -19,21 +19,22 @@ bool Solver::check() {
     sortQueens();
     for (Queen *current: leftQueens) {
         if (current->doesExist()) {
+            QueenVector possibilities;
             for (auto connection : *current->getConnections()) {
                 Queen *possibility = Queen::findActiveQueen(current, connection.second);
                 if (possibility && current->canJoin(*possibility)) {
-                    // There is a viable connection to this direction
+                    possibilities.push_back(possibility);
+                }
+            }
+            for (auto possibility : possibilities) {
                     move(current, possibility);
                     if (check()) {
                         return true;
-                    } else {
-                        undoMove();
                     }
-                }
             }
-            // No viable connection
         }
     }
+    undoMove();
     return false;
 }
 

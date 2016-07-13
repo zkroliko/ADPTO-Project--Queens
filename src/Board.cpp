@@ -6,7 +6,7 @@ Board::Board(unsigned short size) : size(std::min(MAX_BOARD_SIZE,size)) {}
 
 void Board::addQueen(Queen& queen, const unsigned short x, const unsigned short y) {
     Board::queens[Pos(x,y)] = &queen;
-//incrementQueenCounts(Pos(x,y));
+    incrementQueenCounts(Pos(x,y));
 }
 
 std::string Board::toString() {
@@ -28,7 +28,7 @@ std::string Board::toString() {
 bool Board::removeQueen(unsigned short x, unsigned short y) {
     if (queens.count(Pos(x,y)) > 0 ) {
         queens[Pos(x,y)]->setExists(false);
-//        decrementQueenCounts(Pos(x,y));
+        decrementQueenCounts(Pos(x,y));
         return true;
     } else {
         return false;
@@ -104,7 +104,7 @@ unsigned short Board::limitOfMovesToPosition(const Pos& pos) {
     QueenCount* axes[] = {&rowQueenCount,&columnQueenCount,&leftDiagonalQueenCount,&rightDiagonalQueenCount};
     for (unsigned int i = 0; i < 4; ++i) {
         if (axes[i]->count(posToAxis(pos,Axes(i))) > 0) {
-            total += (*axes[i])[posToAxis(pos,Axes(i))];
+            total += (*axes[i])[posToAxis(pos,Axes(i))] - 1;
         }
     }
     return total;

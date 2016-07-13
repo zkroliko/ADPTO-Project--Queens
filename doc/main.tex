@@ -32,10 +32,6 @@ Informatyka 2015/16}
 
 \newpage
 
-\tableofcontents
-
-\newpage
-
 \section{Uwagi}
 
 Moja filozofia zapisu: \textbf{hetmany bijące nie zmieniają miejsca tylko znikają na rzecz zbitego} - taki obraz przyjąłem gdyż łatwiej było go rozpisać, mniej dynamiki. Często zapisuję bicie jako redukcję. Nie zmienia to w żaden sposób istoty algorytmu tylko jego opis, który mógłby być mylący bez tej notki.
@@ -87,6 +83,34 @@ Jak zademonstrowano na powyższym przykładzie możemy \textbf{wykluczyć} pewne
 
 \subsubsection{Heurystyka}
 
-Możemy się zatem spodziewać, że pewne hetmany zostaną zredukowane "wcześniej niż później", a więc mamy nałożoną jakąś \textbf{kolejność przeszukiwania} przestrzeni rozwiązań. \textbf{Skoro mniejszy potencjał hetmana wiąże się z niemożnością bycia końcowym hetmanem to może powinniśmy ruszać się  wcześniej tymi z mniejszym potencjałem?}.
+Możemy się zatem spodziewać, że pewne hetmany zostaną zredukowane "wcześniej niż później", a więc mamy nałożoną jakąś \textbf{kolejność przeszukiwania} przestrzeni rozwiązań. \textbf{Skoro mniejszy potencjał hetmana wiąże się z niemożnością bycia końcowym hetmanem to może powinniśmy ruszać się  wcześniej tymi z mniejszym potencjałem?}
+
+\section{Algorytm}
+
+Pominąłem opis wczytywanie wejścia oraz wypisywania rozwiązania.
+
+\begin{lstlisting}
+bool recursiveCheck():
+	if achievedTarget:
+		true
+	else:
+		sortQueens()
+		for queen in board:
+			connections = queen.possibleConnections()
+			sortConnections()
+			for connection in connections:
+				if recursiveCheck():
+					return true
+	// Nie znaleziono rozwiazania	
+		undoMove()	
+		false
+\end{lstlisting}
+
+\section{Generator scenariuszy}
+
+Dodatkowo wykonałem w języku Python generator który dla danej wielkości planszy, końcowej ilość hetmanów i docelowej ilości ruchów tworzy losowy scenariusz wraz z przykładowym rozwiązaniem.
+
+Okazał się on bardzo przydatny w testowaniu algorytmu.
+
 
 \end{document}
