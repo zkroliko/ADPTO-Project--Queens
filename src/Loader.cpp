@@ -29,6 +29,7 @@ Board *Loader::load(const unsigned short size) {
                 power = Queen::powerFromExternal(parsedLong);
                 Queen *created = new Queen(power, Pos(i, j));
                 board->addQueen(*created, i, j);
+                created->setBoard(board);
                 if (last) {
                     last->addConnection(Direction::right, created);
                     created->addConnection(Direction::left, last);

@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <math.h>
+#include <limits.h>
 #include "../include/Queen.h"
+#include "../include/Solver.h"
 
 unsigned short Queen::powerFromExternal(const unsigned long long power) {
     return static_cast<unsigned short>(log2(power));
@@ -89,6 +91,14 @@ Queen *Queen::findFutureJoinableQueen(Queen *source, Queen *target) {
         return nullptr;
     }
 }
+
+short Queen::rating() const {
+        short connection = connectionCount()*CONNECTION_COUNT_WEIGHT;
+        short powerCoefficient = power*POWER_WEIGHT;
+        return connection+powerCoefficient;
+}
+
+
 
 
 

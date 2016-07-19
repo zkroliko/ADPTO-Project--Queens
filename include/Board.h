@@ -7,6 +7,8 @@
 
 const unsigned short MAX_BOARD_SIZE = 128;
 
+class Queen;
+
 typedef std::map<Pos, Queen*> PlacementMap;
 typedef std::map<unsigned short, unsigned short> QueenCount;
 
@@ -33,6 +35,7 @@ public:
     Queen* get(unsigned short x, unsigned short y) { return queens.at(Pos(x,y));}
     short getSize() const { return size;}
     std::string toString();
+    std::string queenCountsToString();
     PlacementMap* getQueens() { return &queens; }
     unsigned short limitOfMovesToPosition(const Pos& pos);
     inline unsigned short posToAxis(const Pos& pos, const Axes);
@@ -41,7 +44,6 @@ public:
     inline unsigned short posToLeftDiagonal(const Pos& pos);
     inline unsigned short posToRightDiagonal(const Pos& pos);
 
-private:
     void incrementQueenCounts(const Pos& pos);
     void decrementQueenCounts(const Pos& pos);
 };

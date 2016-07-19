@@ -230,7 +230,6 @@ Board::Board(unsigned short size) : size(std::min(MAX_BOARD_SIZE,size)) {}
 
 void Board::addQueen(Queen& queen, const unsigned short x, const unsigned short y) {
     Board::queens[Pos(x,y)] = &queen;
-    incrementQueenCounts(Pos(x,y));
 }
 
 std::string Board::toString() {
@@ -252,7 +251,6 @@ std::string Board::toString() {
 bool Board::removeQueen(unsigned short x, unsigned short y) {
     if (queens.count(Pos(x,y)) > 0 ) {
         queens[Pos(x,y)]->setExists(false);
-        decrementQueenCounts(Pos(x,y));
         return true;
     } else {
         return false;
@@ -620,17 +618,13 @@ bool Solver::check() {
     sortQueens();
     for (Queen *current: leftQueens) {
         if (current->doesExist()) {
-            QueenVector possibilities;
             for (auto connection : *current->getConnections()) {
                 Queen *possibility = Queen::findActiveQueen(current, connection.second);
                 if (possibility && current->canJoin(*possibility)) {
-                    possibilities.push_back(possibility);
-                }
-            }
-            for (auto possibility : possibilities) {
-                move(current, possibility);
-                if (check()) {
-                    return true;
+                    move(current, possibility);
+                    if (check()) {
+                        return true;
+                    }
                 }
             }
         }

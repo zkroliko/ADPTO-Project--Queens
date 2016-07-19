@@ -48,13 +48,10 @@ W celach uproszczenia obliczeń wartości są reprezentowane jako wykładniki li
 
 \begin{itemize}
 \item osie - pion, poziom i skosy
+\item hetman widoczny dla hetmana \textit{(zbijalny bezpośrednio, ale bez patrzenia na wykładnik)}
 \end{itemize}
 
-\clearpage
-
-\section{Wstępne obserwacje}
-
-\section{Ogranicznie maksymalnej wartości hetmana}
+\section{Wstępne obserwacje - ogranicznie maksymalnej wartości hetmana}
 
 Na wartość końcową hetmana da się nałożyć pewne ograniczenie:
 
@@ -67,8 +64,6 @@ Jest to łatwo udowodnić - każde bicie skierowane przeciwko hetmanowi podnosi 
       \includegraphics[scale=0.3]{obs1.png}
   \caption{Zliczenie ilości hetmanów na poszczególnych osiach.}
 \end{figure}
-
-\clearpage 
 
 \begin{figure}[!ht]
   \centering
@@ -90,6 +85,11 @@ Możemy się zatem spodziewać, że pewne hetmany zostaną zredukowane "wcześni
 Algorytm przeszukuje przestrzeń rozwiązań za pomocą wywołań rekurencyjnych modyfikując za każdym razem planszę. Kolejność przeszukiwania jest heurystyką, która zostanie później opisana.
 
 \begin{lstlisting}
+//Dane globalne
+queens[] // lista hetmanow, kazdy zawiera powiazania do sasiadow
+queenCount // obecna liczba hetmanow
+targetCount // docelowa liczba hetmanow
+
 bool recursiveCheck():
 	if achievedTarget():
 		return true
@@ -99,7 +99,7 @@ bool recursiveCheck():
 			connections = queen.possibleConnections()
 			sortConnections()
 			for connection in connections:
-				move(connection)
+				move(queen, connection)
 				if recursiveCheck():
 					return true
 	// Nie znaleziono rozwiazania	
@@ -107,18 +107,73 @@ bool recursiveCheck():
 		return false
 		
 bool achievedTarget():
-	return currentQueens <= targetQueens
+	return queenCount <= targetCount
+
+void move(queen, target) // Logika ruchu	
+	
 \end{lstlisting}
 
-\subsection{SortConnections}
+\clearpage
+
+\subsection{Sposób sortowania hetmanów}
+
+\subsubsection{Najprostsze rozwiązanie}
+
+Hetmany porządkujemy w oparciu o wartość:
+
+$$c_n$$
+czyli ilość hetmanów "widocznych" \textit{(zbijalnych bezpośrednio, ale bez patrzenia na wykładnik)} z tego pola przed podjęciem jakiegokolwiek ruchu
+
+Algorytm okazał się dawać lepsze wyniki od rozwiązania \textit{brute-force}, zwłaszcza biorąc pod uwagę, że porządek zbijania hetmanów jest statyczny.
+
+
+\subsubsection{Wersja wynikająca z analizy}
+
+W początkowym założeniu wybór hetmana, który w danej chwili się rusza miał opierać się na heurystyce \textbf{4.0.1} gdzie każdemu hetmanowi zostaje przyporządkowana wartość liczbowa $v_n$ dana formułą:
+
+$$v_n=p_n*C_p+c_n*C_c$$
+
+gdzie:
+\begin{itemize}
+\item $p_n$ - aktualny wykładnik hetmana
+\item $c_n$ - maksymalna teoretyczna ilość bić na to pole
+\item $C_p$ - stała, wyznaczana eksperymentalnie, domyślnie $1$
+\item $C_c$ - stała, wyznaczana eksperymentalnie, domyślnie $1$
+\end{itemize}
+
+Hetmany miałyby być sortowane rosnąco wedle tej wartości a następnie w tym porządku ruszane.
+
+\subsubsection{Udoskonalona wersja}
+
+Okazało się, że \textbf{znacząco} lepsze wyniki daje dodatkowe uproszczenie : zamiast maksymalnej teoretycznej ilości bić na pole - początkowa liczba "widocznych" \textit{(zbijalnych bezpośrednio, ale bez patrzenia na wykładnik)}.
+
+W wyniku tego otrzymujemy formułę:
+
+$$v_n=p_n*C_p+c_n*C_c$$
+
+gdzie:
+\begin{itemize}
+\item $p_n$ - aktualny wykładnik hetmana
+\item $c_n$ - ilość hetmanów widocznych z tego pola
+\item $C_p$ - stała, wyznaczana eksperymentalnie, domyślnie $1$
+\item $C_c$ - stała, wyznaczana eksperymentalnie, \textbf{domyślnie $2$}
+\end{itemize}
+
+Bardzo ważny stała się waga $C_c$, która wyznaczona została przypadkowo, lecz daje bardzo dobre wyniki. Np. wartości $1.9$ i $2.1$ dają sporo wolniejszy algorytm. Nie udało mi się znaleźć przyczyny takiego stanu rzeczy.
+
+\subsection{Sposób sortowania ruchów dla danego hetmana}
 
 Zadaniem tego algorytmu jest porządkowanie połączeń wychodzących z danego hetmana. W końcowej wersji nie nałożyłem tutaj żadnego heurystycznego porządku - wszystkie testowane heurystyki okazały się nieużyteczne.
 
-\section{Generator scenariuszy}
+\subsection{Podsumowanie}
 
-Dodatkowo wykonałem w języku Python generator który dla danej wielkości planszy, końcowej ilość hetmanów i docelowej ilości ruchów tworzy losowy scenariusz wraz z przykładowym rozwiązaniem.
+Najlepszy okazał się algorytm, który bazował na pierwotnej analizie - a raczej uproszonych wnioskach z niej, który został poddany dodatkowemu uproszczeniu poprzez "irracjonalne" zmiany. Pokazuje to, że początkowa analiza była stanowczo za słaba jednak czasami eksperymenty z algorytmem przynoszą efekty.
 
-Okazał się on bardzo przydatny w testowaniu algorytmu.
+Problem można poddać dużo dogłębniejszej analizie - próbowałem to robić nieformalnie ale mało które "teorie" dawały efekty w praktyce. Implementacja zdecydowanie zajmowała sporo czasu, choćby ze względu na wymóg arbitra  zamieszczenia kodu w jednym pliku co utrudniało modyfikacje.
+
+\section{Dodatek: Generator scenariuszy}
+
+Dodatkowo wykonałem w języku Python generator który dla danej wielkości planszy, końcowej ilość hetmanów i docelowej ilości ruchów tworzy losowy scenariusz wraz z przykładowym rozwiązaniem. Okazał się on bardzo przydatny w testowaniu algorytmu. 
 
 
 \end{document}

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include "../include/Solver.h"
 #include "../include/Debugging.h"
 #include "../include/Tools.h"
@@ -13,11 +14,14 @@ bool Solver::possible(unsigned int solutionRequirement) {
 }
 
 bool Solver::check() {
+//    std::cout << "Limit: " << endl;
+//    std::cout << board.queenCountsToString();
     if (queenCount <= target) {
         return true;
     }
     sortQueens();
-    for (Queen *current: leftQueens) {
+
+    for (Queen *current : leftQueens) {
         if (current->doesExist()) {
             QueenVector possibilities;
             for (auto connection : *current->getConnections()) {
@@ -40,13 +44,15 @@ bool Solver::check() {
 
 void Solver::move(Queen *source, Queen *target) {
     Move move(source,target);
-    target -= move.apply();
+    target -= move.apply(board);
     moves.push_back(move);
     queenCount--;
+
+//    leftQueens.erase(source)
 }
 
 void Solver::undoMove() {
-    target += moves.back().undo();
+    target += moves.back().undo(board);
     moves.pop_back();
     queenCount++;
 }
@@ -73,15 +79,15 @@ void Solver::outlineQueens() {
 }
 
 void Solver::sortQueens() {
-    std::sort(leftQueens.begin(),leftQueens.end(), []( Queen* lhs, Queen* rhs )
+    std::sort(leftQueens.begin(),leftQueens.end(), [](Queen* lhs, Queen* rhs )
     {
-        unsigned short leftConnectionCount = lhs->connectionCount();
-        unsigned short rightConnectionCount = rhs->connectionCount();
-        unsigned short left = lhs->getPower()*POWER_WEIGHT+leftConnectionCount*CONNECTION_COUNT_WEIGHT;
-        unsigned short right = rhs->getPower()*POWER_WEIGHT+rightConnectionCount*CONNECTION_COUNT_WEIGHT;
-        return left < right;
+        return lhs->rating() < rhs->rating();
     });
 }
+
+
+
+
 
 
 

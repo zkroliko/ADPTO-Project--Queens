@@ -2,9 +2,13 @@
 \BOOKMARK [1][-]{section.2}{Reprezentacja problemu}{}% 2
 \BOOKMARK [2][-]{subsection.2.1}{Zapis wartosci hetman\363w}{section.2}% 3
 \BOOKMARK [2][-]{subsection.2.2}{Kr\363tki s\233ownik moich pojec - w razie watpliwosci}{section.2}% 4
-\BOOKMARK [1][-]{section.3}{Wstepne obserwacje}{}% 5
-\BOOKMARK [1][-]{section.4}{Ogranicznie maksymalnej wartosci hetmana}{}% 6
-\BOOKMARK [2][-]{subsubsection.4.0.1}{Heurystyka}{section.4}% 7
-\BOOKMARK [1][-]{section.5}{Algorytm}{}% 8
-\BOOKMARK [2][-]{subsection.5.1}{SortConnections}{section.5}% 9
-\BOOKMARK [1][-]{section.6}{Generator scenariuszy}{}% 10
+\BOOKMARK [1][-]{section.3}{Wstepne obserwacje - ogranicznie maksymalnej wartosci hetmana}{}% 5
+\BOOKMARK [2][-]{subsubsection.3.0.1}{Heurystyka}{section.3}% 6
+\BOOKMARK [1][-]{section.4}{Algorytm}{}% 7
+\BOOKMARK [2][-]{subsection.4.1}{Spos\363b sortowania hetman\363w}{section.4}% 8
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Najprostsze rozwiazanie}{subsection.4.1}% 9
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Wersja wynikajaca z analizy}{subsection.4.1}% 10
+\BOOKMARK [3][-]{subsubsection.4.1.3}{Udoskonalona wersja}{subsection.4.1}% 11
+\BOOKMARK [2][-]{subsection.4.2}{Spos\363b sortowania ruch\363w dla danego hetmana}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.3}{Podsumowanie}{section.4}% 13
+\BOOKMARK [1][-]{section.5}{Dodatek: Generator scenariuszy}{}% 14

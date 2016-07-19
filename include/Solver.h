@@ -15,6 +15,7 @@ const unsigned short CONNECTION_COUNT_WEIGHT = 2;
 class Solver {
     Board board;
     QueenVector leftQueens;
+    QueenVector usedQueens;
     MoveVector moves;
     int queenCount;
     int target;
@@ -27,12 +28,12 @@ public:
     }
 private:
     void move(Queen *source, Queen *target);
-//    void ignoreUselessNeighbours(Queen *queen);
     void undoMove();
     unsigned int countQueens();
     void outlineQueens();
     void sortQueens();
     bool check();
+    void insertJoined(Queen *source, Queen *target);
 };
 
 

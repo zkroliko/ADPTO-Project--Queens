@@ -4,8 +4,10 @@
 #include <map>
 #include <vector>
 #include "Postition.h"
+#include "Board.h"
 
 class Queen;
+class Board;
 
 const unsigned short MAX_QUEEN_POWER = 60;
 const unsigned short MIN_QUEEN_POWER = 0;
@@ -27,6 +29,7 @@ typedef std::vector<Queen*> PossibleMoves;
 
 class Queen {
 private:
+    Board* board;
     unsigned short power;
     Pos position;
     bool exists;
@@ -46,12 +49,18 @@ public:
     void setExists(bool exists) { Queen::exists = exists; }
     bool isConnected(const Queen &other) const;
     bool isConnected(const Direction &direction) const {return connections.count(direction) >0;};
-    bool useless();
     unsigned short connectionCount() const {return static_cast<unsigned short>(connections.size());};
     unsigned short viableConnectionCount() const;
     bool canJoin(const Queen &other) const {return exists && other.exists && power == other.power;};
     const Pos &getPosition() const { return position; }
     const Direction directionTo(const Queen *other) const;
+    short rating() const;
+    bool useless();
+
+
+    void setBoard(Board *board) {
+        Queen::board = board;
+    }
 
     static Queen* findActiveQueen(Queen *source, Queen *target);
     static Queen* findFutureJoinableQueen(Queen *source, Queen *target);

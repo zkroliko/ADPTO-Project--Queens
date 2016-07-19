@@ -1,17 +1,18 @@
 #include "../include/Actions.h"
+#include "../include/Board.h"
 #include<sstream>
 
 /* Returns the number of reductions in this move */
-short Move::apply() {
+short Move::apply(Board& board) {
     source->setExists(false);
     target->setPower(target->getPower()+ static_cast<unsigned short>(1));
     return 0;
 }
 
 /* Returns the number of reverted reductions in this move */
-short Move::undo() {
+short Move::undo(Board& board) {
     for (auto reduction: reductions) {
-        reduction->undo();
+        reduction->undo(board);
     }
     target->setPower(target->getPower()- static_cast<unsigned short>(1));
     source->setExists(true);
@@ -26,7 +27,7 @@ string Move::toString() {
     return ss.str();
 }
 
-short Ignore::apply() {
+short Ignore::apply(Board& board) {
     if (queen->doesExist()) {
         queen->setExists(false);
     } else {
@@ -35,7 +36,7 @@ short Ignore::apply() {
     return -1;
 }
 
-short Ignore::undo() {
+short Ignore::undo(Board& board) {
     queen->setExists(true);
     return 1;
 }
