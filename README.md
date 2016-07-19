@@ -1,5 +1,5 @@
 # ADPTO-Project--Queens
-Solution for a project involving creating a heuristic solver for NP-hard problem.
+Solution for a project involving creating a heuristic solver for NP-hard problem. Implemented in C++11 with some Python tools.
 
 ![alt tag](https://cloud.githubusercontent.com/assets/8882153/16954864/ca7d9eca-4dd2-11e6-8d18-65fcd5ff9df6.png)
 
