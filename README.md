@@ -5,6 +5,6 @@ Solution for a project involving creating a heuristic solver for NP-hard problem
 
 Directory description:
 - . - CLion C++11 project containing the solver
-- ./adptoRaw - one file solver, form required by an automatic tester
-- judge - Python program provided with the problem, checking the solution
-- generator - program self-written in Python generating random problems with solutions according to some specification
+- ./adptoRaw - solver contained in one source file, form required by an automatic tester
+- judge - Python program provided with the problem used checking the solution
+- generator - Python program generating random problems with solutions according to some specification
